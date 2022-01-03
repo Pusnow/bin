@@ -11,15 +11,12 @@ jobs:
   main:
     strategy:
       matrix:
-        bin:
-          [
-            "micro",
-          ]
+        bin: ["micro"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Build
         run: |
-          cd  ${{ matrix.bin }
+          cd  ${{ matrix.bin }}
           ./build.sh
