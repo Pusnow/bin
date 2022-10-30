@@ -65,7 +65,6 @@ source versions
 download() {
     mkdir -p "${EXTRACT_PATH}"
     download-untar fzf z "https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz"
-    wget -qO "${BUILD_PATH}/etc/fzf-keybindings.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.bash"
     download-untar hexyl z "https://github.com/sharkdp/hexyl/releases/download/${HEXYL_VERSION}/hexyl-${HEXYL_VERSION}-x86_64-unknown-linux-musl.tar.gz"
     download-untar delta z "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/delta-${DELTA_VERSION}-x86_64-unknown-linux-musl.tar.gz"
     download-untar nvim z "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux64.tar.gz"
@@ -87,6 +86,7 @@ install() {
     mkdir -p "${BUILD_PATH}/share/bash_completion.d" "${BUILD_PATH}/share/zsh_completion.d"
 
     install-bin "${EXTRACT_PATH}/fzf/fzf"
+    wget -qO "${BUILD_PATH}/etc/fzf-keybindings.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.bash"
 
     install-bin "${EXTRACT_PATH}/hexyl/hexyl"
     install-man1 "${EXTRACT_PATH}/hexyl/hexyl.1"
@@ -127,5 +127,29 @@ install() {
 
 }
 
-# download
+gen-completions() {
+    "${BUILD_PATH}/bin/rclone" completion bash >/tmp/rclone.bash
+    "${BUILD_PATH}/bin/rclone" completion zsh >/tmp/_rclone
+    install-bash-c "/tmp/rclone.bash"
+    install-zsh-c "/tmp/_rclone"
+
+    "${BUILD_PATH}/bin/pandoc" --bash-completion >/tmp/pandoc.bash
+    install-bash-c "/tmp/pandoc.bash"
+
+    gh completion -s bash >"/tmp/gh.bash"
+    gh completion -s zsh >"/tmp/_gh"
+    install-bash-c "/tmp/gh.bash"
+    install-zsh-c "/tmp/_gh"
+
+    kubectl completion bash >"/tmp/kubectl.bash"
+    kubectl completion zsh >"/tmp/_kubectl"
+    install-bash-c "/tmp/kubectl.bash"
+    install-zsh-c "/tmp/_kubectl"
+
+}
+
+download
 install
+gen-completions
+
+tar -cvzf bin.tar.gz build
