@@ -98,11 +98,16 @@ install() {
     install-man1 "${EXTRACT_PATH}/hexyl/hexyl.1"
 
     install-bin "${EXTRACT_PATH}/delta/delta"
+    wget -qO /tmp/delta.bash "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.bash"
+    install-bash-c /tmp/delta.bash
+    wget -qO /tmp/_delta "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.zsh"
+    install-zsh-c /tmp/_delta
 
     install-all "${EXTRACT_PATH}/nvim"
 
     install-bin "${EXTRACT_PATH}/rclone/rclone"
     install-man1 "${EXTRACT_PATH}/rclone/rclone.1"
+    
 
     install-all "${EXTRACT_PATH}/pandoc"
 
