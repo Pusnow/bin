@@ -153,3 +153,4 @@ install
 gen-completions
 
 tar -cvzf bin.tar.gz build
+gh release upload bin bin.tar.gz --clobber
