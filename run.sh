@@ -82,11 +82,17 @@ download() {
     wait
 }
 install() {
-    mkdir -p "${BUILD_PATH}/bin" "${BUILD_PATH}/etc" "${BUILD_PATH}/share/man/man1"
+    mkdir -p "${BUILD_PATH}/bin" "${BUILD_PATH}/share/man/man1"
+    mkdir -p "${BUILD_PATH}/share/bash_plugin.d" "${BUILD_PATH}/share/zsh_plugin.d"
     mkdir -p "${BUILD_PATH}/share/bash_completion.d" "${BUILD_PATH}/share/zsh_completion.d"
 
     install-bin "${EXTRACT_PATH}/fzf/fzf"
-    wget -qO "${BUILD_PATH}/etc/fzf-keybindings.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.bash"
+    wget -qO "${BUILD_PATH}/share/bash_plugin.d/fzf-keybindings.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.bash"
+    wget -qO "${BUILD_PATH}/share/zsh_plugin.d/fzf-keybindings.zsh" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.zsh"
+    wget -qO "/tmp/fzf.1" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf.1"
+    install-man1 "/tmp/fzf.1"
+    wget -qO "/tmp/fzf-tmux.1" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf-tmux.1"
+    install-man1 "/tmp/fzf-tmux.1"
 
     install-bin "${EXTRACT_PATH}/hexyl/hexyl"
     install-man1 "${EXTRACT_PATH}/hexyl/hexyl.1"
