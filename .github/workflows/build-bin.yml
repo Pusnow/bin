@@ -4,6 +4,8 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0"
 
 jobs:
   build:
@@ -15,4 +17,6 @@ jobs:
         run: ./run.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
+            keepalive:
+      - uses: gautamkrishnar/keepalive-workflow@v1
 
