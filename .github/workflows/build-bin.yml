@@ -17,6 +17,5 @@ jobs:
         run: ./run.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
-            keepalive:
       - uses: gautamkrishnar/keepalive-workflow@v1
 
