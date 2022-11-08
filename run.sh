@@ -4,6 +4,7 @@ set -ex
 
 export BUILD_PATH=build
 export EXTRACT_PATH=extract
+export ARCH="${ARCH:-x64}"
 
 strip-directory() {
     NE=$(find "${1}" -maxdepth 1 -mindepth 1 | wc -l | xargs || true)
@@ -90,31 +91,48 @@ fi
 
 source versions
 
-if [[ -n "${ARCH}" ]]; then
-    source "${ARCH}"
-else
-    source arch-amd64.sh
-fi
+arch() {
+
+    if [[ "${ARCH}" == "x64" ]]; then
+        echo $1
+    elif [[ "${ARCH}" == "aarch64" ]]; then
+        echo $2
+    else
+        echo "Unknown"
+    fi
+}
 
 download() {
     mkdir -p "${EXTRACT_PATH}"
-    download-untar fzf z "https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_${AMD64}.tar.gz"
-    download-untar hexyl z "https://github.com/sharkdp/hexyl/releases/download/${HEXYL_VERSION}/hexyl-${HEXYL_VERSION}-${X86_64}-unknown-linux-musl.tar.gz"
-    download-untar delta z "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/delta-${DELTA_VERSION}-${X86_64}-unknown-linux-musl.tar.gz"
-    download-untar nvim z "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux64.tar.gz"
-    download-unzip rclone "https://github.com/rclone/rclone/releases/download/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-${AMD64}.zip"
-    download-untar pandoc z "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-${AMD64}.tar.gz"
-    download-untar bpftrace J "https://github.com/iovisor/bpftrace/releases/download/${BPFTRACE_VERSION}/binary_tools_man-bundle.tar.xz"
-    download-file hadolint "https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-${X86_64}"
-    download-file bazel "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-${AMD64}"
-    download-file jq "https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64"
-    download-untar dust z "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-${X86_64}-unknown-linux-gnu.tar.gz"
-    download-untar fd z "https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION}-${X86_64}-unknown-linux-gnu.tar.gz"
-    download-untar gh z "https://github.com/cli/cli/releases/download/${GH_VERSION}/gh_${GH_VERSION:1}_linux_${AMD64}.tar.gz"
-    download-untar rg z "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-${X86_64}-unknown-linux-musl.tar.gz"
-    download-file kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/${AMD64}/kubectl"
-    download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
-    download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-${X86_64}.tar.gz"
+    download-untar fzf z "https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_$(arch amd64 arm64).tar.gz"
+    download-untar hexyl z "https://github.com/sharkdp/hexyl/releases/download/${HEXYL_VERSION}/hexyl-${HEXYL_VERSION}-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
+    download-untar delta z "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/delta-${DELTA_VERSION}-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-untar nvim z "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux$(arch 64).tar.gz"
+    fi
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-unzip rclone "https://github.com/rclone/rclone/releases/download/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-$(arch amd64).zip"
+    fi
+    download-untar pandoc z "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-$(arch amd64 arm64).tar.gz"
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-untar bpftrace J "https://github.com/iovisor/bpftrace/releases/download/${BPFTRACE_VERSION}/binary_tools_man-bundle.tar.xz"
+    fi
+    download-file hadolint "https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-$(arch x86_64 arm64)"
+    download-file bazel "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-$(arch amd64 arm64)"
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-file jq "https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux$(arch 64)"
+    fi
+    download-untar dust z "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
+    download-untar fd z "https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION}-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
+    download-untar gh z "https://github.com/cli/cli/releases/download/${GH_VERSION}/gh_${GH_VERSION:1}_linux_$(arch amd64 arm64).tar.gz"
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-untar rg z "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-$(arch x86_64)-unknown-linux-musl.tar.gz"
+    fi
+    download-file kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/$(arch amd64 arm64)/kubectl"
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
+    fi
+    download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch x86_64 aarch64).tar.gz"
     wait
 }
 install() {
@@ -137,20 +155,28 @@ install() {
     download-install-bash-c delta.bash "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.bash"
     download-install-zsh-c _delta "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.zsh"
 
-    install-all "${EXTRACT_PATH}/nvim"
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-all "${EXTRACT_PATH}/nvim"
+    fi
 
-    install-bin "${EXTRACT_PATH}/rclone/rclone"
-    install-man 1 "${EXTRACT_PATH}/rclone/rclone.1"
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-bin "${EXTRACT_PATH}/rclone/rclone"
+        install-man 1 "${EXTRACT_PATH}/rclone/rclone.1"
+    fi
 
     install-all "${EXTRACT_PATH}/pandoc"
 
-    install-all "${EXTRACT_PATH}/bpftrace"
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-all "${EXTRACT_PATH}/bpftrace"
+    fi
 
     install-bin "${EXTRACT_PATH}/hadolint/hadolint"
 
     install-bin "${EXTRACT_PATH}/bazel/bazel"
 
-    install-bin "${EXTRACT_PATH}/jq/jq"
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-bin "${EXTRACT_PATH}/jq/jq"
+    fi
 
     install-bin "${EXTRACT_PATH}/dust/dust"
 
@@ -161,12 +187,17 @@ install() {
 
     install-all "${EXTRACT_PATH}/gh"
 
-    install-bin "${EXTRACT_PATH}/rg/rg"
-    install-bash-c "${EXTRACT_PATH}/rg/complete/rg.bash"
-    install-zsh-c "${EXTRACT_PATH}/rg/complete/_rg"
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-bin "${EXTRACT_PATH}/rg/rg"
+        install-bash-c "${EXTRACT_PATH}/rg/complete/rg.bash"
+        install-zsh-c "${EXTRACT_PATH}/rg/complete/_rg"
+    fi
 
     install-bin "${EXTRACT_PATH}/kubectl/kubectl"
-    install-bin "${EXTRACT_PATH}/ninja/ninja"
+
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-bin "${EXTRACT_PATH}/ninja/ninja"
+    fi
 
     install-bin-dir "${EXTRACT_PATH}/cmake/bin"
     install-man-dir 1 "${EXTRACT_PATH}/cmake/man/man1"
@@ -185,10 +216,12 @@ install() {
 }
 
 gen-completions() {
-    "${BUILD_PATH}/bin/rclone" completion bash >/tmp/rclone.bash
-    "${BUILD_PATH}/bin/rclone" completion zsh >/tmp/_rclone
-    install-bash-c "/tmp/rclone.bash"
-    install-zsh-c "/tmp/_rclone"
+    if [[ "${ARCH}" == "x64" ]]; then
+        "${BUILD_PATH}/bin/rclone" completion bash >/tmp/rclone.bash
+        "${BUILD_PATH}/bin/rclone" completion zsh >/tmp/_rclone
+        install-bash-c "/tmp/rclone.bash"
+        install-zsh-c "/tmp/_rclone"
+    fi
 
     "${BUILD_PATH}/bin/pandoc" --bash-completion >/tmp/pandoc.bash
     install-bash-c "/tmp/pandoc.bash"
@@ -209,7 +242,7 @@ download
 install
 gen-completions
 
-tar -cvzf linux-x64.tar.gz build
-tar -cvjf linux-x64.tar.bz2 build
-tar -cvJf linux-x64.tar.xz build
-gh release upload bin linux-x64.tar.gz linux-x64.tar.bz2 linux-x64.tar.xz --clobber
+tar -cvzf "linux-${ARCH}.tar.gz" build
+tar -cvjf "linux-${ARCH}.tar.bz2" build
+tar -cvJf "linux-${ARCH}.tar.xz" build
+gh release upload bin "linux-${ARCH}.tar.gz" "linux-${ARCH}.tar.bz2" "linux-${ARCH}.tar.xz" --clobber
