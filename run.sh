@@ -93,6 +93,10 @@ install() {
     install-man1 "/tmp/fzf.1"
     wget -qO "/tmp/fzf-tmux.1" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf-tmux.1"
     install-man1 "/tmp/fzf-tmux.1"
+    wget -qO "/tmp/fzf.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.bash"
+    wget -qO "/tmp/_fzf" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.zsh"
+    install-bash-c "/tmp/fzf.bash"
+    install-zsh-c "/tmp/_fzf"
 
     install-bin "${EXTRACT_PATH}/hexyl/hexyl"
     install-man1 "${EXTRACT_PATH}/hexyl/hexyl.1"
@@ -107,7 +111,6 @@ install() {
 
     install-bin "${EXTRACT_PATH}/rclone/rclone"
     install-man1 "${EXTRACT_PATH}/rclone/rclone.1"
-    
 
     install-all "${EXTRACT_PATH}/pandoc"
 
