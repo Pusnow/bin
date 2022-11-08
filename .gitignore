@@ -1,4 +1,6 @@
 build/
 extract/
 versions
-bin.tar.gz
+*.tar.gz
+*.tar.bz2
+*.tar.xz

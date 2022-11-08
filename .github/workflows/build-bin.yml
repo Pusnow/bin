@@ -1,21 +1,33 @@
-name: Build bin.tar.gz
+name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * 0"
 
 jobs:
-  build:
+  build-x64:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Build bin.tar.gz
+
+      - name: run.sh
         run: ./run.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: gautamkrishnar/keepalive-workflow@v1
-
+  build-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: apt
+        run: |
+          apt update -y
+          apt install -y qemu-user-static
+      - name: run.sh
+        run: ./run.sh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ARCH: aarch64

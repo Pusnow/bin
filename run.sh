@@ -216,25 +216,31 @@ install() {
 }
 
 gen-completions() {
-    if [[ "${ARCH}" == "x64" ]]; then
+    if [[ -x "${BUILD_PATH}/bin/rclone" ]]; then
         "${BUILD_PATH}/bin/rclone" completion bash >/tmp/rclone.bash
         "${BUILD_PATH}/bin/rclone" completion zsh >/tmp/_rclone
         install-bash-c "/tmp/rclone.bash"
         install-zsh-c "/tmp/_rclone"
     fi
 
-    "${BUILD_PATH}/bin/pandoc" --bash-completion >/tmp/pandoc.bash
-    install-bash-c "/tmp/pandoc.bash"
+    if [[ -x "${BUILD_PATH}/bin/pandoc" ]]; then
+        "${BUILD_PATH}/bin/pandoc" --bash-completion >/tmp/pandoc.bash
+        install-bash-c "/tmp/pandoc.bash"
+    fi
 
-    gh completion -s bash >"/tmp/gh.bash"
-    gh completion -s zsh >"/tmp/_gh"
-    install-bash-c "/tmp/gh.bash"
-    install-zsh-c "/tmp/_gh"
+    if [[ -x "${BUILD_PATH}/bin/gh" ]]; then
+        gh completion -s bash >"/tmp/gh.bash"
+        gh completion -s zsh >"/tmp/_gh"
+        install-bash-c "/tmp/gh.bash"
+        install-zsh-c "/tmp/_gh"
+    fi
 
-    kubectl completion bash >"/tmp/kubectl.bash"
-    kubectl completion zsh >"/tmp/_kubectl"
-    install-bash-c "/tmp/kubectl.bash"
-    install-zsh-c "/tmp/_kubectl"
+    if [[ -x "${BUILD_PATH}/bin/kubectl" ]]; then
+        kubectl completion bash >"/tmp/kubectl.bash"
+        kubectl completion zsh >"/tmp/_kubectl"
+        install-bash-c "/tmp/kubectl.bash"
+        install-zsh-c "/tmp/_kubectl"
+    fi
 
 }
 
