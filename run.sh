@@ -42,11 +42,24 @@ install-all() {
 install-bin() {
     chmod +x "${1}"
     cp -prv "${1}" "${BUILD_PATH}/bin/"
-
 }
 
-install-man1() {
-    cp -prv "${1}" "${BUILD_PATH}/share/man/man1/"
+install-bin-dir() {
+    chmod +x "${1}/"*
+    cp -prv "${1}/"* "${BUILD_PATH}/bin/"
+}
+
+install-man() {
+    if [[ ! -d "${BUILD_PATH}/share/man/man${1}/" ]]; then
+        mkdir -p "${BUILD_PATH}/share/man/man${1}/"
+    fi
+    cp -prv "${2}" "${BUILD_PATH}/share/man/man${1}/"
+}
+install-man-dir() {
+    if [[ ! -d "${BUILD_PATH}/share/man/man${1}/" ]]; then
+        mkdir -p "${BUILD_PATH}/share/man/man${1}/"
+    fi
+    cp -prv "${2}/"* "${BUILD_PATH}/share/man/man${1}/"
 }
 
 install-bash-c() {
@@ -56,9 +69,9 @@ install-zsh-c() {
     cp -prv "${1}" "${BUILD_PATH}/share/zsh_completion.d/"
 }
 
-download-install-man1() {
-    wget -qO "/tmp/${1}" "${2}"
-    install-man1 "/tmp/${1}"
+download-install-man() {
+    wget -qO "/tmp/${2}" "${3}"
+    install-man "${1}" "/tmp/${2}"
 }
 
 download-install-bash-c() {
@@ -95,23 +108,24 @@ download() {
     download-untar rg z "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz"
     download-file kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
     download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
+    download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz"
     wait
 }
 install() {
-    mkdir -p "${BUILD_PATH}/bin" "${BUILD_PATH}/share/man/man1"
+    mkdir -p "${BUILD_PATH}/bin"
     mkdir -p "${BUILD_PATH}/share/bash_plugin.d" "${BUILD_PATH}/share/zsh_plugin.d"
     mkdir -p "${BUILD_PATH}/share/bash_completion.d" "${BUILD_PATH}/share/zsh_completion.d"
 
     install-bin "${EXTRACT_PATH}/fzf/fzf"
     wget -qO "${BUILD_PATH}/share/bash_plugin.d/fzf-keybindings.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.bash"
     wget -qO "${BUILD_PATH}/share/zsh_plugin.d/fzf-keybindings.zsh" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.zsh"
-    download-install-man1 fzf.1 "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf.1"
-    download-install-man1 fzf-tmux.1 "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf-tmux.1"
+    download-install-man 1 fzf.1 "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf.1"
+    download-install-man 1 fzf-tmux.1 "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf-tmux.1"
     download-install-bash-c fzf.bash "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.bash"
     download-install-zsh-c _fzf "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.zsh"
 
     install-bin "${EXTRACT_PATH}/hexyl/hexyl"
-    install-man1 "${EXTRACT_PATH}/hexyl/hexyl.1"
+    install-man 1 "${EXTRACT_PATH}/hexyl/hexyl.1"
 
     install-bin "${EXTRACT_PATH}/delta/delta"
     download-install-bash-c delta.bash "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.bash"
@@ -120,7 +134,7 @@ install() {
     install-all "${EXTRACT_PATH}/nvim"
 
     install-bin "${EXTRACT_PATH}/rclone/rclone"
-    install-man1 "${EXTRACT_PATH}/rclone/rclone.1"
+    install-man 1 "${EXTRACT_PATH}/rclone/rclone.1"
 
     install-all "${EXTRACT_PATH}/pandoc"
 
@@ -135,7 +149,7 @@ install() {
     install-bin "${EXTRACT_PATH}/dust/dust"
 
     install-bin "${EXTRACT_PATH}/fd/fd"
-    install-man1 "${EXTRACT_PATH}/fd/fd.1"
+    install-man 1 "${EXTRACT_PATH}/fd/fd.1"
     install-bash-c "${EXTRACT_PATH}/fd/autocomplete/fd.bash"
     install-zsh-c "${EXTRACT_PATH}/fd/autocomplete/_fd"
 
@@ -147,6 +161,17 @@ install() {
 
     install-bin "${EXTRACT_PATH}/kubectl/kubectl"
     install-bin "${EXTRACT_PATH}/ninja/ninja"
+
+    install-bin-dir "${EXTRACT_PATH}/cmake/bin"
+    install-man-dir 1 "${EXTRACT_PATH}/cmake/man/man1"
+    install-man-dir 7 "${EXTRACT_PATH}/cmake/man/man7"
+
+    install-bash-c "${EXTRACT_PATH}/cmake/share/bash-completion/completions/cmake"
+    mv "${BUILD_PATH}/share/bash_completion.d/cmake" "${BUILD_PATH}/share/bash_completion.d/cmake.bash"
+    install-bash-c "${EXTRACT_PATH}/cmake/share/bash-completion/completions/cpack"
+    mv "${BUILD_PATH}/share/bash_completion.d/cpack" "${BUILD_PATH}/share/bash_completion.d/cpack.bash"
+    install-bash-c "${EXTRACT_PATH}/cmake/share/bash-completion/completions/ctest"
+    mv "${BUILD_PATH}/share/bash_completion.d/ctest" "${BUILD_PATH}/share/bash_completion.d/ctest.bash"
 
     cp versions "${BUILD_PATH}/versions"
 
