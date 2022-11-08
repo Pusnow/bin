@@ -94,6 +94,7 @@ download() {
     download-untar gh z "https://github.com/cli/cli/releases/download/${GH_VERSION}/gh_${GH_VERSION:1}_linux_amd64.tar.gz"
     download-untar rg z "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz"
     download-file kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
+    download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
     wait
 }
 install() {
@@ -145,6 +146,7 @@ install() {
     install-zsh-c "${EXTRACT_PATH}/rg/complete/_rg"
 
     install-bin "${EXTRACT_PATH}/kubectl/kubectl"
+    install-bin "${EXTRACT_PATH}/ninja/ninja"
 
     cp versions "${BUILD_PATH}/versions"
 
