@@ -202,5 +202,7 @@ download
 install
 gen-completions
 
-tar -cvzf bin.tar.gz build
-gh release upload bin bin.tar.gz --clobber
+tar -cvzf linux-x64.tar.gz build
+tar -cvjf linux-x64.tar.bz2 build
+tar -cvJf linux-x64.tar.xz build
+gh release upload bin linux-x64.tar.gz linux-x64.tar.bz2 linux-x64.tar.xz --clobber
