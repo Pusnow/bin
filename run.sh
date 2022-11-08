@@ -56,6 +56,21 @@ install-zsh-c() {
     cp -prv "${1}" "${BUILD_PATH}/share/zsh_completion.d/"
 }
 
+download-install-man1() {
+    wget -qO "/tmp/${1}" "${2}"
+    install-man1 "/tmp/${1}"
+}
+
+download-install-bash-c() {
+    wget -qO "/tmp/${1}" "${2}"
+    install-bash-c "/tmp/${1}"
+}
+
+download-install-zsh-c() {
+    wget -qO "/tmp/${1}" "${2}"
+    install-zsh-c "/tmp/${1}"
+}
+
 if [[ ! -f versions ]]; then
     ./versions.sh >versions
 fi
@@ -89,23 +104,17 @@ install() {
     install-bin "${EXTRACT_PATH}/fzf/fzf"
     wget -qO "${BUILD_PATH}/share/bash_plugin.d/fzf-keybindings.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.bash"
     wget -qO "${BUILD_PATH}/share/zsh_plugin.d/fzf-keybindings.zsh" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.zsh"
-    wget -qO "/tmp/fzf.1" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf.1"
-    install-man1 "/tmp/fzf.1"
-    wget -qO "/tmp/fzf-tmux.1" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf-tmux.1"
-    install-man1 "/tmp/fzf-tmux.1"
-    wget -qO "/tmp/fzf.bash" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.bash"
-    wget -qO "/tmp/_fzf" "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.zsh"
-    install-bash-c "/tmp/fzf.bash"
-    install-zsh-c "/tmp/_fzf"
+    download-install-man1 fzf.1 "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf.1"
+    download-install-man1 fzf-tmux.1 "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/man/man1/fzf-tmux.1"
+    download-install-bash-c fzf.bash "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.bash"
+    download-install-zsh-c _fzf "https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.zsh"
 
     install-bin "${EXTRACT_PATH}/hexyl/hexyl"
     install-man1 "${EXTRACT_PATH}/hexyl/hexyl.1"
 
     install-bin "${EXTRACT_PATH}/delta/delta"
-    wget -qO /tmp/delta.bash "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.bash"
-    install-bash-c /tmp/delta.bash
-    wget -qO /tmp/_delta "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.zsh"
-    install-zsh-c /tmp/_delta
+    download-install-bash-c delta.bash "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.bash"
+    download-install-zsh-c _delta "https://raw.githubusercontent.com/dandavison/delta/${DELTA_VERSION}/etc/completion/completion.zsh"
 
     install-all "${EXTRACT_PATH}/nvim"
 
