@@ -172,6 +172,7 @@ install() {
     mv "${BUILD_PATH}/share/bash_completion.d/cpack" "${BUILD_PATH}/share/bash_completion.d/cpack.bash"
     install-bash-c "${EXTRACT_PATH}/cmake/share/bash-completion/completions/ctest"
     mv "${BUILD_PATH}/share/bash_completion.d/ctest" "${BUILD_PATH}/share/bash_completion.d/ctest.bash"
+    cp -prv "${EXTRACT_PATH}/cmake/share/cmake-"* "${BUILD_PATH}/share/"
 
     cp versions "${BUILD_PATH}/versions"
 
