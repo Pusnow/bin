@@ -110,9 +110,9 @@ download() {
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar nvim z "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux$(arch 64).tar.gz"
     fi
-    if [[ "${ARCH}" == "x64" ]]; then
-        download-unzip rclone "https://github.com/rclone/rclone/releases/download/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-$(arch amd64).zip"
-    fi
+
+    download-unzip rclone "https://github.com/rclone/rclone/releases/download/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-$(arch amd64 arm64).zip"
+
     download-untar pandoc z "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-$(arch amd64 arm64).tar.gz"
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar bpftrace J "https://github.com/iovisor/bpftrace/releases/download/${BPFTRACE_VERSION}/binary_tools_man-bundle.tar.xz"
@@ -159,10 +159,8 @@ install() {
         install-all "${EXTRACT_PATH}/nvim"
     fi
 
-    if [[ "${ARCH}" == "x64" ]]; then
-        install-bin "${EXTRACT_PATH}/rclone/rclone"
-        install-man 1 "${EXTRACT_PATH}/rclone/rclone.1"
-    fi
+    install-bin "${EXTRACT_PATH}/rclone/rclone"
+    install-man 1 "${EXTRACT_PATH}/rclone/rclone.1"
 
     install-all "${EXTRACT_PATH}/pandoc"
 
