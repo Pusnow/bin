@@ -231,22 +231,22 @@ gen-completions() {
     fi
 
     if [[ -x "${BUILD_PATH}/bin/gh" ]]; then
-        gh completion -s bash >"/tmp/gh.bash"
-        gh completion -s zsh >"/tmp/_gh"
+        ${BUILD_PATH}/bin/gh completion -s bash >"/tmp/gh.bash"
+        ${BUILD_PATH}/bin/gh completion -s zsh >"/tmp/_gh"
         install-bash-c "/tmp/gh.bash"
         install-zsh-c "/tmp/_gh"
     fi
 
     if [[ -x "${BUILD_PATH}/bin/kubectl" ]]; then
-        kubectl completion bash >"/tmp/kubectl.bash"
-        kubectl completion zsh >"/tmp/_kubectl"
+        ${BUILD_PATH}/bin/kubectl completion bash >"/tmp/kubectl.bash"
+        ${BUILD_PATH}/bin/kubectl completion zsh >"/tmp/_kubectl"
         install-bash-c "/tmp/kubectl.bash"
         install-zsh-c "/tmp/_kubectl"
     fi
 
     if [[ -x "${BUILD_PATH}/bin/hugo" ]]; then
-        hugo completion bash >"/tmp/hugo.bash"
-        hugo completion zsh >"/tmp/_hugo"
+        ${BUILD_PATH}/bin/hugo completion bash >"/tmp/hugo.bash"
+        ${BUILD_PATH}/bin/hugo completion zsh >"/tmp/_hugo"
         install-bash-c "/tmp/hugo.bash"
         install-zsh-c "/tmp/_hugo"
     fi
