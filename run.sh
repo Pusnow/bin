@@ -32,7 +32,7 @@ download-untar() {
 download-unzip() {
     mkdir -p "${EXTRACT_PATH}/${1}"
     wget -qO "${EXTRACT_PATH}/${1}.zip" "$2"
-    unzip -d "${EXTRACT_PATH}/${1}" "${EXTRACT_PATH}/${1}.zip"
+    unzip -o -d "${EXTRACT_PATH}/${1}" "${EXTRACT_PATH}/${1}.zip"
     strip-directory "${EXTRACT_PATH}/${1}"
 }
 
@@ -133,6 +133,8 @@ download() {
         download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
     fi
     download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch x86_64 aarch64).tar.gz"
+
+    download-untar hugo z "https://github.com/gohugoio/hugo/releases/download/${HUGO_VERSION}/hugo_${HUGO_VERSION:1}_linux-$(arch amd64 arm64).tar.gz"
     wait
 }
 install() {
@@ -208,6 +210,8 @@ install() {
     install-bash-c "${EXTRACT_PATH}/cmake/share/bash-completion/completions/ctest"
     mv "${BUILD_PATH}/share/bash_completion.d/ctest" "${BUILD_PATH}/share/bash_completion.d/ctest.bash"
     cp -prv "${EXTRACT_PATH}/cmake/share/cmake-"* "${BUILD_PATH}/share/"
+
+    install-bin "${EXTRACT_PATH}/hugo/hugo"
 
     cp versions "${BUILD_PATH}/versions"
 
