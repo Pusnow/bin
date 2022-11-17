@@ -32,7 +32,7 @@ download-untar() {
 download-unzip() {
     mkdir -p "${EXTRACT_PATH}/${1}"
     wget -qO "${EXTRACT_PATH}/${1}.zip" "$2"
-    unzip -d "${EXTRACT_PATH}/${1}" "${EXTRACT_PATH}/${1}.zip"
+    unzip -o -d "${EXTRACT_PATH}/${1}" "${EXTRACT_PATH}/${1}.zip"
     strip-directory "${EXTRACT_PATH}/${1}"
 }
 
@@ -133,6 +133,8 @@ download() {
         download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
     fi
     download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch x86_64 aarch64).tar.gz"
+
+    download-untar hugo z "https://github.com/gohugoio/hugo/releases/download/${HUGO_VERSION}/hugo_${HUGO_VERSION:1}_linux-$(arch amd64 arm64).tar.gz"
     download-untar tokei z "https://github.com/XAMPPRocky/tokei/releases/download/${TOKEI_VERSION}/tokei-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     wait
 }
@@ -210,6 +212,8 @@ install() {
     mv "${BUILD_PATH}/share/bash_completion.d/ctest" "${BUILD_PATH}/share/bash_completion.d/ctest.bash"
     cp -prv "${EXTRACT_PATH}/cmake/share/cmake-"* "${BUILD_PATH}/share/"
 
+    install-bin "${EXTRACT_PATH}/hugo/hugo"
+
     install-bin "${EXTRACT_PATH}/tokei/tokei"
 
     cp versions "${BUILD_PATH}/versions"
@@ -230,19 +234,25 @@ gen-completions() {
     fi
 
     if [[ -x "${BUILD_PATH}/bin/gh" ]]; then
-        gh completion -s bash >"/tmp/gh.bash"
-        gh completion -s zsh >"/tmp/_gh"
+        ${BUILD_PATH}/bin/gh completion -s bash >"/tmp/gh.bash"
+        ${BUILD_PATH}/bin/gh completion -s zsh >"/tmp/_gh"
         install-bash-c "/tmp/gh.bash"
         install-zsh-c "/tmp/_gh"
     fi
 
     if [[ -x "${BUILD_PATH}/bin/kubectl" ]]; then
-        kubectl completion bash >"/tmp/kubectl.bash"
-        kubectl completion zsh >"/tmp/_kubectl"
+        ${BUILD_PATH}/bin/kubectl completion bash >"/tmp/kubectl.bash"
+        ${BUILD_PATH}/bin/kubectl completion zsh >"/tmp/_kubectl"
         install-bash-c "/tmp/kubectl.bash"
         install-zsh-c "/tmp/_kubectl"
     fi
 
+    if [[ -x "${BUILD_PATH}/bin/hugo" ]]; then
+        ${BUILD_PATH}/bin/hugo completion bash >"/tmp/hugo.bash"
+        ${BUILD_PATH}/bin/hugo completion zsh >"/tmp/_hugo"
+        install-bash-c "/tmp/hugo.bash"
+        install-zsh-c "/tmp/_hugo"
+    fi
 }
 
 download
