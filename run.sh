@@ -244,6 +244,12 @@ gen-completions() {
         install-zsh-c "/tmp/_kubectl"
     fi
 
+    if [[ -x "${BUILD_PATH}/bin/hugo" ]]; then
+        hugo completion bash >"/tmp/hugo.bash"
+        hugo completion zsh >"/tmp/_hugo"
+        install-bash-c "/tmp/hugo.bash"
+        install-zsh-c "/tmp/_hugo"
+    fi
 }
 
 download
