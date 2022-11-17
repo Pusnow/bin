@@ -133,6 +133,7 @@ download() {
         download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
     fi
     download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch x86_64 aarch64).tar.gz"
+    download-untar tokei z "https://github.com/XAMPPRocky/tokei/releases/download/${TOKEI_VERSION}/tokei-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     wait
 }
 install() {
@@ -208,6 +209,8 @@ install() {
     install-bash-c "${EXTRACT_PATH}/cmake/share/bash-completion/completions/ctest"
     mv "${BUILD_PATH}/share/bash_completion.d/ctest" "${BUILD_PATH}/share/bash_completion.d/ctest.bash"
     cp -prv "${EXTRACT_PATH}/cmake/share/cmake-"* "${BUILD_PATH}/share/"
+
+    install-bin "${EXTRACT_PATH}/tokei/tokei"
 
     cp versions "${BUILD_PATH}/versions"
 
