@@ -264,5 +264,5 @@ tar -cvjf "linux-${ARCH}.tar.bz2" build
 tar -cvJf "linux-${ARCH}.tar.xz" build
 gh release upload bin "linux-${ARCH}.tar.gz" "linux-${ARCH}.tar.bz2" "linux-${ARCH}.tar.xz" --clobber
 if [[ "${ARCH}" == "x64" ]]; then
-    gh release upload bin "versions"
+    gh release upload bin "versions" --clobber
 fi
