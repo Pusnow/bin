@@ -255,14 +255,23 @@ gen-completions() {
     fi
 }
 
-download
-install
-gen-completions
+main() {
+    download
+    install
+    gen-completions
 
-tar -cvzf "linux-${ARCH}.tar.gz" build
-tar -cvjf "linux-${ARCH}.tar.bz2" build
-tar -cvJf "linux-${ARCH}.tar.xz" build
-gh release upload bin "linux-${ARCH}.tar.gz" "linux-${ARCH}.tar.bz2" "linux-${ARCH}.tar.xz" --clobber
-if [[ "${ARCH}" == "x64" ]]; then
-    gh release upload bin "versions" --clobber
+    tar -cvzf "linux-${ARCH}.tar.gz" build
+    tar -cvjf "linux-${ARCH}.tar.bz2" build
+    tar -cvJf "linux-${ARCH}.tar.xz" build
+    gh release upload bin "linux-${ARCH}.tar.gz" "linux-${ARCH}.tar.bz2" "linux-${ARCH}.tar.xz" --clobber
+    if [[ "${ARCH}" == "x64" ]]; then
+        gh release upload bin "versions" --clobber
+    fi
+}
+
+wget -qO "versions.old" "https://github.com/Pusnow/bin/releases/download/bin/versions"
+if diff -q "versions.old" "versions" &>/dev/null; then
+    echo "Skipping upgrade..."
+else
+    main
 fi
