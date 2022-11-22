@@ -218,6 +218,7 @@ install() {
 
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"
+    cp versions "versions.${ARCH}"
 
 }
 
