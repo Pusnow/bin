@@ -217,6 +217,7 @@ install() {
     install-bin "${EXTRACT_PATH}/tokei/tokei"
 
     cp versions "${BUILD_PATH}/versions"
+    cp versions "${BUILD_PATH}/versions.${ARCH}"
 
 }
 
@@ -267,9 +268,10 @@ main() {
     if [[ "${ARCH}" == "x64" ]]; then
         gh release upload bin "versions" --clobber
     fi
+    gh release upload bin "versions.${ARCH}" --clobber
 }
 
-wget -qO "versions.old" "https://github.com/Pusnow/bin/releases/download/bin/versions"
+wget -qO "versions.old" "https://github.com/Pusnow/bin/releases/download/bin/versions.${ARCH}" || true
 if diff -q "versions.old" "versions" &>/dev/null; then
     echo "Skipping upgrade..."
 else
