@@ -50,7 +50,7 @@ aria2() {
 }
 
 zstd() {
-    pip install --user meson
+    pip install --user meson ninja
     download-untar zstd z "https://github.com/facebook/zstd/releases/download/${VERSION}/zstd-${VERSION:1}.tar.gz"
     pushd "${SRC_PATH}/zstd/build/meson"
 
