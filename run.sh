@@ -137,6 +137,9 @@ download() {
     download-untar hugo z "https://github.com/gohugoio/hugo/releases/download/${HUGO_VERSION}/hugo_${HUGO_VERSION:1}_linux-$(arch amd64 arm64).tar.gz"
     download-untar tokei z "https://github.com/XAMPPRocky/tokei/releases/download/${TOKEI_VERSION}/tokei-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     download-untar dnslookup z "https://github.com/ameshkov/dnslookup/releases/download/${DNSLOOKUP_VERSION}/dnslookup-linux-$(arch amd64 arm64)-${DNSLOOKUP_VERSION}.tar.gz"
+
+    download-untar zstd z "https://github.com/Pusnow/bin/releases/download/bin/zstd-$(arch x64).tar.gz"
+
     wait
 }
 install() {
@@ -218,6 +221,8 @@ install() {
     install-bin "${EXTRACT_PATH}/tokei/tokei"
 
     install-bin "${EXTRACT_PATH}/dnslookup/dnslookup"
+
+    install-all "${EXTRACT_PATH}/zstd"
 
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"

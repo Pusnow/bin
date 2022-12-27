@@ -2,8 +2,13 @@
 
 set -ex
 
+export ARCH="${ARCH:-x64}"
+
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
+}
+pusnow-latest() {
+    wget -qO - "https://github.com/Pusnow/bin/releases/download/bin/$1-version-${ARCH}" || true
 }
 
 echo "FZF_VERSION=$(gh-latest junegunn fzf)"
@@ -26,3 +31,4 @@ echo "CMAKE_VERSION=$(curl -L -s "https://cmake.org/files/LatestRelease/cmake-la
 echo "HUGO_VERSION=$(gh-latest gohugoio hugo)"
 echo "TOKEI_VERSION=$(gh-latest XAMPPRocky tokei)"
 echo "DNSLOOKUP_VERSION=$(gh-latest ameshkov dnslookup)"
+echo "ZSTD_VERSION=$(pusnow-latest zstd)"
