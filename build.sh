@@ -14,7 +14,7 @@ gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
 }
 pusnow-latest() {
-    wget -qO - "https://github.com/Pusnow/bin/releases/download/bin/$1-version" || true
+    wget -qO - "https://github.com/Pusnow/bin/releases/download/bin/$1-version-${ARCH}" || true
 }
 
 strip-directory() {
