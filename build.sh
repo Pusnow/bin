@@ -51,15 +51,18 @@ aria2() {
 
 zstd() {
     download-untar zstd z "https://github.com/facebook/zstd/releases/download/${VERSION}/zstd-${VERSION:1}.tar.gz"
-    pushd "${SRC_PATH}/zstd"
+    pushd "${SRC_PATH}/zstd/build/meson"
 
-    pushd build/cmake
-    mkdir builddir
+    LDFLAGS=-static meson setup \
+        --prefix "${BUILD_REAL_PATH}/zstd" \
+        -Dbin_programs=true \
+        -Dstatic_runtime=true \
+        -Ddefault_library=static \
+        -Dzlib=disabled -Dlzma=disabled -Dlz4=disabled \
+        builddir
     pushd builddir
-    cmake -DZSTD_USE_STATIC_RUNTIME=ON -DCMAKE_INSTALL_PREFIX="${BUILD_REAL_PATH}/zstd" ..
-    make -j
-    make install
-    popd
+    ninja
+    ninja install
     popd
     popd
 }
