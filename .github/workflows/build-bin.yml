@@ -10,6 +10,20 @@ on:
 jobs:
   build-x64:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo: [zstd]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: build.sh
+        run: ./build.sh ${{ matrix.repo }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: gautamkrishnar/keepalive-workflow@v1
+  pack-x64:
+    needs: build-x64
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
@@ -18,7 +32,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: gautamkrishnar/keepalive-workflow@v1
-  build-aarch64:
+  pack-aarch64:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -1,6 +1,8 @@
 build/
 extract/
+src/
 versions
+*-version-*
 *.tar.gz
 *.tar.bz2
 *.tar.xz
