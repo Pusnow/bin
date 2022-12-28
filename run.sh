@@ -145,6 +145,10 @@ download() {
 
     download-untar neofetch z "https://github.com/dylanaraps/neofetch/archive/refs/tags/${NEOFETCH_VERSION}.tar.gz"
 
+    download-file shfmt "https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_linux_$(arch amd64 arm64)"
+
+    download-untar shellcheck J "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.$(arch x86_64 aarch64).tar.xz"
+
     wait
 }
 install() {
@@ -238,6 +242,10 @@ install() {
 
     install-bin "${EXTRACT_PATH}/neofetch/neofetch"
     install-man 1 "${EXTRACT_PATH}/neofetch/neofetch.1"
+
+    install-bin "${EXTRACT_PATH}/shfmt/shfmt"
+
+    install-bin "${EXTRACT_PATH}/shellcheck/shellcheck"
 
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"
