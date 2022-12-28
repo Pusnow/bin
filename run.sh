@@ -143,6 +143,8 @@ download() {
         download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
     fi
 
+    download-untar neofetch z "https://github.com/dylanaraps/neofetch/archive/refs/tags/${NEOFETCH_VERSION}.tar.gz"
+
     wait
 }
 install() {
@@ -233,6 +235,9 @@ install() {
 
     mkdir -p "${BUILD_PATH}/share/ssl"
     wget -O "${BUILD_PATH}/share/ssl/cacert.pem" "https://curl.se/ca/cacert.pem"
+
+    install-bin "${EXTRACT_PATH}/neofetch"
+    install-man 1 "${EXTRACT_PATH}/neofetch.1"
 
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"
