@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        repo: [zstd]
+        repo: [zstd, aria2]
 
     steps:
       - uses: actions/checkout@v3

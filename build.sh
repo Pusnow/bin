@@ -3,6 +3,8 @@ set -ex
 
 export BUILD_PATH=build
 export BUILD_REAL_PATH=$(realpath build)
+export LOCAL_PATH=local
+export LOCAL_REAL_PATH=$(realpath local)
 export SRC_PATH=src
 export ARCH="${ARCH:-x64}"
 
@@ -40,10 +42,73 @@ download-git() {
 }
 
 aria2() {
-    download-git aria2 "${VERSION}" "https://github.com/aria2/aria2.git"
+    # openssl
+    download-untar ssl z https://www.openssl.org/source/openssl-1.1.1s.tar.gz
+    pushd "${SRC_PATH}/ssl"
+    ./config --prefix="${LOCAL_REAL_PATH}" no-shared
+    make -j
+    make install_sw
+    popd
+    # libc-cares
+    download-untar cares z https://github.com/c-ares/c-ares/releases/download/cares-1_18_1/c-ares-1.18.1.tar.gz
+    pushd "${SRC_PATH}/cares"
+    ./configure \
+        --disable-shared \
+        --enable-static \
+        --without-random \
+        --prefix="${LOCAL_REAL_PATH}"
+    make -j
+    make install
+    popd
+    # # libexpat
+    download-untar expat z https://github.com/libexpat/libexpat/releases/download/R_2_5_0/expat-2.5.0.tar.gz
+    pushd "${SRC_PATH}/expat"
+    ./configure \
+        --disable-shared \
+        --enable-static \
+        --prefix="${LOCAL_REAL_PATH}"
+    make -j
+    make install
+    popd
+
+    # # zlib1g
+    download-untar zlib z https://github.com/madler/zlib/releases/download/v1.2.13/zlib-1.2.13.tar.gz
+    pushd "${SRC_PATH}/zlib"
+    ./configure \
+        --prefix="${LOCAL_REAL_PATH}" \
+        --libdir="${LOCAL_REAL_PATH}/lib" \
+        --includedir="${LOCAL_REAL_PATH}/include" \
+        --static
+    make -j
+    make install
+    popd
+
+    # # libsqlite3
+    download-untar sqlite z https://www.sqlite.org/2022/sqlite-autoconf-3400000.tar.gz
+    pushd "${SRC_PATH}/sqlite"
+    ./configure \
+        --disable-shared \
+        --enable-static \
+        --prefix="${LOCAL_REAL_PATH}"
+    make -j
+    make install
+    popd
+
+    download-untar aria2 z https://github.com/aria2/aria2/releases/download/${VERSION}/aria2-${VERSION:8}.tar.gz
     pushd "${SRC_PATH}/aria2"
-    autoreconf -i
-    ./configure ARIA2_STATIC=yes --prefix="${BUILD_REAL_PATH}/aria2"
+    export PKG_CONFIG_PATH="${LOCAL_REAL_PATH}/lib/pkgconfig"
+    ./configure --prefix="${BUILD_REAL_PATH}" \
+        --without-libxml2 \
+        --without-gnutls \
+        --without-libxml2 \
+        --without-libnettle \
+        --without-libssh2 \
+        --with-openssl --with-openssl-prefix="${LOCAL_REAL_PATH}" \
+        --with-libcares --with-libcares-prefix="${LOCAL_REAL_PATH}" \
+        --with-sqlite3 --with-sqlite3-prefix="${LOCAL_REAL_PATH}" \
+        --with-libexpat --with-libexpat-prefix="${LOCAL_REAL_PATH}" \
+        --with-libz --with-libz-prefix="${LOCAL_REAL_PATH}" \
+        ARIA2_STATIC=yes
     make -j
     make install
     popd

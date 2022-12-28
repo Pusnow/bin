@@ -1,6 +1,7 @@
 build/
 extract/
 src/
+local/
 versions
 *-version-*
 *.tar.gz
