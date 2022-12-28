@@ -97,7 +97,7 @@ aria2() {
     download-untar aria2 z https://github.com/aria2/aria2/releases/download/${VERSION}/aria2-${VERSION:8}.tar.gz
     pushd "${SRC_PATH}/aria2"
     export PKG_CONFIG_PATH="${LOCAL_REAL_PATH}/lib/pkgconfig"
-    ./configure --prefix="${BUILD_REAL_PATH}" \
+    ./configure --prefix="${BUILD_REAL_PATH}/aria2" \
         --without-libxml2 \
         --without-gnutls \
         --without-libxml2 \
