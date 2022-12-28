@@ -280,7 +280,8 @@ main() {
     tar -cvzf "linux-${ARCH}.tar.gz" build
     tar -cvjf "linux-${ARCH}.tar.bz2" build
     tar -cvJf "linux-${ARCH}.tar.xz" build
-    tar --zstd -cvf "linux-${ARCH}.tar.zst" build
+    tar -cvf "linux-${ARCH}.tar" build
+    zstd -19 -T4 "linux-${ARCH}.tar"
     gh release upload bin "linux-${ARCH}.tar.gz" "linux-${ARCH}.tar.bz2" "linux-${ARCH}.tar.xz" "linux-${ARCH}.tar.zst" --clobber
     if [[ "${ARCH}" == "x64" ]]; then
         gh release upload bin "versions" --clobber
