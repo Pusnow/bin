@@ -37,3 +37,4 @@ echo "CACERTS_VERSION=$(curl --etag-save /dev/stdout -sSL --remote-name https://
 echo "NEOFETCH_VERSION=$(gh-latest dylanaraps neofetch)"
 echo "SHFMT_VERSION=$(gh-latest mvdan sh)"
 echo "SHELLCHECK_VERSION=$(gh-latest koalaman shellcheck)"
+echo "DASEL_VERSION=$(gh-latest TomWright dasel)"

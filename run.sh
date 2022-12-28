@@ -149,6 +149,8 @@ download() {
 
     download-untar shellcheck J "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.$(arch x86_64 aarch64).tar.xz"
 
+    download-file dasel "https://github.com/TomWright/dasel/releases/download/${DASEL_VERSION}/dasel_linux_$(arch amd64 arm64)"
+
     wait
 }
 install() {
@@ -247,6 +249,8 @@ install() {
 
     install-bin "${EXTRACT_PATH}/shellcheck/shellcheck"
 
+    install-bin "${EXTRACT_PATH}/dasel/dasel"
+
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"
     cp versions "versions.${ARCH}"
@@ -285,6 +289,13 @@ gen-completions() {
         ${BUILD_PATH}/bin/hugo completion zsh >"/tmp/_hugo"
         install-bash-c "/tmp/hugo.bash"
         install-zsh-c "/tmp/_hugo"
+    fi
+
+    if [[ -x "${BUILD_PATH}/bin/dasel" ]]; then
+        ${BUILD_PATH}/bin/dasel completion bash >"/tmp/dasel.bash"
+        ${BUILD_PATH}/bin/dasel completion zsh >"/tmp/_dasel"
+        install-bash-c "/tmp/dasel.bash"
+        install-zsh-c "/tmp/_dasel"
     fi
 }
 
