@@ -140,6 +140,7 @@ download() {
 
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar zstd z "https://github.com/Pusnow/bin/releases/download/bin/zstd-$(arch x64).tar.gz"
+        download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
     fi
 
     wait
@@ -226,6 +227,8 @@ install() {
 
     if [[ "${ARCH}" == "x64" ]]; then
         install-all "${EXTRACT_PATH}/zstd"
+        install-all "${EXTRACT_PATH}/aria2"
+        mv "${BUILD_PATH}/share/doc/aria2/bash_completion/aria2c" "${BUILD_PATH}/share/bash_completion.d/aria2c.bash"
     fi
 
     cp versions "${BUILD_PATH}/versions"
