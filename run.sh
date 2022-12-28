@@ -231,6 +231,9 @@ install() {
         mv "${BUILD_PATH}/share/doc/aria2/bash_completion/aria2c" "${BUILD_PATH}/share/bash_completion.d/aria2c.bash"
     fi
 
+    mkdir -p "${BUILD_PATH}/share/ssl"
+    wget -O "${BUILD_PATH}/share/ssl/cacert.pem" "https://curl.se/ca/cacert.pem"
+
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"
     cp versions "versions.${ARCH}"
