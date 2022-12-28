@@ -46,7 +46,7 @@ aria2() {
     download-untar ssl z https://www.openssl.org/source/openssl-1.1.1s.tar.gz
     pushd "${SRC_PATH}/ssl"
     ./config --prefix="${LOCAL_REAL_PATH}" no-shared
-    make -j
+    make -j4
     make install_sw
     popd
     # libc-cares
@@ -57,7 +57,7 @@ aria2() {
         --enable-static \
         --without-random \
         --prefix="${LOCAL_REAL_PATH}"
-    make -j
+    make -j4
     make install
     popd
     # # libexpat
@@ -67,7 +67,7 @@ aria2() {
         --disable-shared \
         --enable-static \
         --prefix="${LOCAL_REAL_PATH}"
-    make -j
+    make -j4
     make install
     popd
 
@@ -79,7 +79,7 @@ aria2() {
         --libdir="${LOCAL_REAL_PATH}/lib" \
         --includedir="${LOCAL_REAL_PATH}/include" \
         --static
-    make -j
+    make -j4
     make install
     popd
 
@@ -90,7 +90,7 @@ aria2() {
         --disable-shared \
         --enable-static \
         --prefix="${LOCAL_REAL_PATH}"
-    make -j
+    make -j4
     make install
     popd
 
@@ -109,7 +109,7 @@ aria2() {
         --with-libexpat --with-libexpat-prefix="${LOCAL_REAL_PATH}" \
         --with-libz --with-libz-prefix="${LOCAL_REAL_PATH}" \
         ARIA2_STATIC=yes
-    make -j
+    make -j4
     make install
     popd
 }
