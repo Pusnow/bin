@@ -236,8 +236,8 @@ install() {
     mkdir -p "${BUILD_PATH}/share/ssl"
     wget -O "${BUILD_PATH}/share/ssl/cacert.pem" "https://curl.se/ca/cacert.pem"
 
-    install-bin "${EXTRACT_PATH}/neofetch"
-    install-man 1 "${EXTRACT_PATH}/neofetch.1"
+    install-bin "${EXTRACT_PATH}/neofetch/neofetch"
+    install-man 1 "${EXTRACT_PATH}/neofetch/neofetch.1"
 
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"
