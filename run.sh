@@ -257,9 +257,9 @@ install() {
     install-bin "${EXTRACT_PATH}/dasel/dasel"
 
     if [[ "${ARCH}" == "x64" ]]; then
-        install-bin "${EXTRACT_PATH}/lshw"
-        install-man 1 "${EXTRACT_PATH}/lshw.1"
-        cp -prv "${EXTRACT_PATH}/hwdata" "${BUILD_PATH}/share/hwdata"
+        install-bin "${EXTRACT_PATH}/lshw/lshw"
+        install-man 1 "${EXTRACT_PATH}/lshw/lshw.1"
+        cp -prv "${EXTRACT_PATH}/lshw/hwdata" "${BUILD_PATH}/share/hwdata"
     fi
 
     cp versions "${BUILD_PATH}/versions"
