@@ -309,8 +309,7 @@ gen-completions() {
         install-zsh-c "/tmp/_dasel"
     fi
 }
-download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
-exit
+
 main() {
     download
     install
