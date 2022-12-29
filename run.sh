@@ -9,11 +9,12 @@ export ARCH="${ARCH:-x64}"
 strip-directory() {
     NE=$(find "${1}" -maxdepth 1 -mindepth 1 | wc -l | xargs || true)
     ND=$(find "${1}" -maxdepth 1 -mindepth 1 -type d | wc -l | xargs || true)
-
     if [[ "${NE}" == "1" ]] && [[ "${ND}" == "1" ]]; then
         DIR=$(find "${1}" -maxdepth 1 -mindepth 1)
-        mv "${DIR}/"* "${1}"
-        rm -r "${DIR}"
+        rm -rf "/tmp/stripping"
+        mv "${DIR}" "/tmp/stripping"
+        rm -r "${1}"
+        mv "/tmp/stripping" "${1}"
     fi
 
 }
@@ -308,7 +309,8 @@ gen-completions() {
         install-zsh-c "/tmp/_dasel"
     fi
 }
-
+download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
+exit
 main() {
     download
     install
