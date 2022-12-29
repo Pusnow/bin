@@ -151,6 +151,10 @@ download() {
 
     download-file dasel "https://github.com/TomWright/dasel/releases/download/${DASEL_VERSION}/dasel_linux_$(arch amd64 arm64)"
 
+    if [[ "${ARCH}" == "x64" ]]; then
+        download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
+    fi
+
     wait
 }
 install() {
@@ -250,6 +254,12 @@ install() {
     install-bin "${EXTRACT_PATH}/shellcheck/shellcheck"
 
     install-bin "${EXTRACT_PATH}/dasel/dasel"
+
+    if [[ "${ARCH}" == "x64" ]]; then
+        install-bin "${EXTRACT_PATH}/lshw"
+        install-man 1 "${EXTRACT_PATH}/lshw.1"
+        cp -prv "${EXTRACT_PATH}/hwdata" "${BUILD_PATH}/share/hwdata"
+    fi
 
     cp versions "${BUILD_PATH}/versions"
     cp versions "${BUILD_PATH}/versions.${ARCH}"

@@ -11,9 +11,18 @@ export ARCH="${ARCH:-x64}"
 declare -A OWNERS
 OWNERS["aria2"]=aria2
 OWNERS["zstd"]=facebook
+OWNERS["lshw"]=lyonel
+
+declare -A VCMD
+VCMD["aria2"]=gh-latest
+VCMD["zstd"]=gh-latest
+VCMD["lshw"]=gh-master
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
+}
+gh-master() {
+    gh api "repos/$1/$2/commits" -q ".[0].sha"
 }
 pusnow-latest() {
     wget -qO - "https://github.com/Pusnow/bin/releases/download/bin/$1-version-${ARCH}" || true
@@ -133,9 +142,29 @@ zstd() {
     popd
 }
 
+lshw() {
+    download-git lshw master https://github.com/lyonel/lshw.git
+    pushd "${SRC_PATH}/lshw"
+    rm src/manuf.txt src/oui.txt src/pci.ids src/pnp.ids src/usb.ids
+    make static PREFIX=/tmp/hwdata
+    mkdir -p "${BUILD_REAL_PATH}/lshw/hwdata"
+    pushd src
+    make manuf.txt oui.txt pci.ids pnp.ids usb.ids
+    cp "lshw-static" "${BUILD_REAL_PATH}/lshw/lshw"
+    cp "lshw.1" "${BUILD_REAL_PATH}/lshw/lshw.1"
+    cp "manuf.txt" "${BUILD_REAL_PATH}/lshw/hwdata/manuf.txt"
+    cp "oui.txt" "${BUILD_REAL_PATH}/lshw/hwdata/oui.txt"
+    cp "pci.ids" "${BUILD_REAL_PATH}/lshw/hwdata/pci.ids"
+    cp "pnp.ids" "${BUILD_REAL_PATH}/lshw/hwdata/pnp.ids"
+    cp "pnpid.txt" "${BUILD_REAL_PATH}/lshw/hwdata/pnpid.txt"
+    cp "usb.ids" "${BUILD_REAL_PATH}/lshw/hwdata/usb.ids"
+    popd
+    popd
+}
+
 REPO=$1
 OWNER=${OWNERS[$REPO]}
-gh-latest "${OWNER}" "${REPO}" >"${REPO}-version-${ARCH}"
+${VCMD[$REPO]} "${OWNER}" "${REPO}" >"${REPO}-version-${ARCH}"
 pusnow-latest "${REPO}" >"${REPO}-version-${ARCH}.old"
 if diff -q "${REPO}-version-${ARCH}" "${REPO}-version-${ARCH}.old" &>/dev/null; then
     echo "Skipping upgrade..."
