@@ -154,6 +154,7 @@ download() {
 
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
+        download-untar ipmitool z "https://github.com/Pusnow/bin/releases/download/bin/ipmitool-$(arch x64).tar.gz"
     fi
 
     wait
@@ -260,6 +261,7 @@ install() {
         install-bin "${EXTRACT_PATH}/lshw/lshw"
         install-man 1 "${EXTRACT_PATH}/lshw/lshw.1"
         cp -prv "${EXTRACT_PATH}/lshw/hwdata" "${BUILD_PATH}/share/hwdata"
+        install-all "${EXTRACT_PATH}/ipmitool"
     fi
 
     cp versions "${BUILD_PATH}/versions"
