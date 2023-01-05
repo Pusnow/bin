@@ -12,13 +12,11 @@ declare -A OWNERS
 OWNERS["aria2"]=aria2
 OWNERS["zstd"]=facebook
 OWNERS["lshw"]=lyonel
-OWNERS["ipmitool"]=ipmitool
 
 declare -A VCMD
 VCMD["aria2"]=gh-latest
 VCMD["zstd"]=gh-latest
 VCMD["lshw"]=gh-master
-VCMD["ipmitool"]=gh-latest
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
@@ -161,20 +159,6 @@ lshw() {
     cp "pnpid.txt" "${BUILD_REAL_PATH}/lshw/hwdata/pnpid.txt"
     cp "usb.ids" "${BUILD_REAL_PATH}/lshw/hwdata/usb.ids"
     popd
-    popd
-}
-
-ipmitool() {
-    download-untar ipmitool z "https://github.com/ipmitool/ipmitool/archive/refs/tags/${VERSION}.tar.gz"
-    pushd "${SRC_PATH}/ipmitool"
-    export LDFLAGS=-static
-    ./bootstrap
-    ./configure \
-        --prefix="${LOCAL_REAL_PATH}" \
-        --disable-ipmishell \
-        --disable-shared
-    make -j4
-    make install
     popd
 }
 
