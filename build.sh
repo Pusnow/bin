@@ -170,7 +170,7 @@ ipmitool() {
     export LDFLAGS=-static
     ./bootstrap
     ./configure \
-        --prefix="${LOCAL_REAL_PATH}" \
+        --prefix="${BUILD_REAL_PATH}/ipmitool" \
         --disable-ipmishell \
         --disable-shared
     make -j4
