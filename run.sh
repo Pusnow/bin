@@ -120,9 +120,7 @@ download() {
     fi
     download-file hadolint "https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-$(arch x86_64 arm64)"
     download-file bazel "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-$(arch amd64 arm64)"
-    if [[ "${ARCH}" == "x64" ]]; then
-        download-file jq "https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux$(arch 64)"
-    fi
+
     download-untar dust z "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     download-untar fd z "https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION}-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     download-untar gh z "https://github.com/cli/cli/releases/download/${GH_VERSION}/gh_${GH_VERSION:1}_linux_$(arch amd64 arm64).tar.gz"
@@ -194,10 +192,6 @@ install() {
     install-bin "${EXTRACT_PATH}/hadolint/hadolint"
 
     install-bin "${EXTRACT_PATH}/bazel/bazel"
-
-    if [[ "${ARCH}" == "x64" ]]; then
-        install-bin "${EXTRACT_PATH}/jq/jq"
-    fi
 
     install-bin "${EXTRACT_PATH}/dust/dust"
 
