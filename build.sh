@@ -12,17 +12,25 @@ declare -A OWNERS
 OWNERS["aria2"]=aria2
 OWNERS["zstd"]=facebook
 OWNERS["lshw"]=lyonel
+OWNERS["socat"]="git://repo.or.cz/socat.git"
 
 declare -A VCMD
 VCMD["aria2"]=gh-latest
 VCMD["zstd"]=gh-latest
 VCMD["lshw"]=gh-master
+VCMD["socat"]=git-latest-tag
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
 }
 gh-master() {
     gh api "repos/$1/$2/commits" -q ".[0].sha"
+}
+git-latest-tag() {
+    TMPDIR=$(mktemp -d)
+    git clone "$1" "${TMPDIR}"
+    git -C "${TMPDIR}" describe --tags $(git -C "${TMPDIR}" rev-list --tags --max-count=1)
+    rm -rf "${TMPDIR}"
 }
 pusnow-latest() {
     wget -qO - "https://github.com/Pusnow/bin/releases/download/bin/$1-version-${ARCH}" || true
@@ -50,7 +58,7 @@ download-git() {
     git clone --recursive -b "${2}" --depth 1 "${3}" "${SRC_PATH}/${1}"
 }
 
-aria2() {
+install-openssl() {
     # openssl
     download-untar ssl z https://www.openssl.org/source/openssl-1.1.1s.tar.gz
     pushd "${SRC_PATH}/ssl"
@@ -58,6 +66,11 @@ aria2() {
     make -j4
     make install_sw
     popd
+
+}
+
+aria2() {
+    install-openssl
     # libc-cares
     download-untar cares z https://github.com/c-ares/c-ares/releases/download/cares-1_18_1/c-ares-1.18.1.tar.gz
     pushd "${SRC_PATH}/cares"
@@ -159,6 +172,19 @@ lshw() {
     cp "pnpid.txt" "${BUILD_REAL_PATH}/lshw/hwdata/pnpid.txt"
     cp "usb.ids" "${BUILD_REAL_PATH}/lshw/hwdata/usb.ids"
     popd
+    popd
+}
+
+socat() {
+    sudo apt-get update && sudo apt-get install -y yodl
+    install-openssl
+    download-git socat "${VERSION}" "git://repo.or.cz/socat.git"
+    pushd "${SRC_PATH}/socat"
+    autoconf
+    export PKG_CONFIG_PATH="${LOCAL_REAL_PATH}/lib/pkgconfig"
+    LDFLAGS=-static ./configure --prefix="${BUILD_REAL_PATH}/socat"
+    make -j4
+    make install
     popd
 }
 
