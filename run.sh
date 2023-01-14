@@ -137,11 +137,6 @@ download() {
     download-untar tokei z "https://github.com/XAMPPRocky/tokei/releases/download/${TOKEI_VERSION}/tokei-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     download-untar dnslookup z "https://github.com/ameshkov/dnslookup/releases/download/${DNSLOOKUP_VERSION}/dnslookup-linux-$(arch amd64 arm64)-${DNSLOOKUP_VERSION}.tar.gz"
 
-    if [[ "${ARCH}" == "x64" ]]; then
-        download-untar zstd z "https://github.com/Pusnow/bin/releases/download/bin/zstd-$(arch x64).tar.gz"
-        download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
-    fi
-
     download-untar neofetch z "https://github.com/dylanaraps/neofetch/archive/refs/tags/${NEOFETCH_VERSION}.tar.gz"
 
     download-file shfmt "https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_linux_$(arch amd64 arm64)"
@@ -150,7 +145,11 @@ download() {
 
     download-file dasel "https://github.com/TomWright/dasel/releases/download/${DASEL_VERSION}/dasel_linux_$(arch amd64 arm64)"
 
+    download-untar btm z "https://github.com/ClementTsang/bottom/releases/download/${BTM_VERSION}/bottom_$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
+
     if [[ "${ARCH}" == "x64" ]]; then
+        download-untar zstd z "https://github.com/Pusnow/bin/releases/download/bin/zstd-$(arch x64).tar.gz"
+        download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
         download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
         download-untar socat z "https://github.com/Pusnow/bin/releases/download/bin/socat-$(arch x64).tar.gz"
     fi
@@ -233,12 +232,6 @@ install() {
 
     install-bin "${EXTRACT_PATH}/dnslookup/dnslookup"
 
-    if [[ "${ARCH}" == "x64" ]]; then
-        install-all "${EXTRACT_PATH}/zstd"
-        install-all "${EXTRACT_PATH}/aria2"
-        mv "${BUILD_PATH}/share/doc/aria2/bash_completion/aria2c" "${BUILD_PATH}/share/bash_completion.d/aria2c.bash"
-    fi
-
     mkdir -p "${BUILD_PATH}/share/ssl"
     wget -O "${BUILD_PATH}/share/ssl/cacert.pem" "https://curl.se/ca/cacert.pem"
 
@@ -251,7 +244,15 @@ install() {
 
     install-bin "${EXTRACT_PATH}/dasel/dasel"
 
+    install-bin "${EXTRACT_PATH}/btm/btm"
+    install-bash-c "${EXTRACT_PATH}/btm/completion/btm.bash"
+    install-zsh-c "${EXTRACT_PATH}/btm/completion/_btm"
+
     if [[ "${ARCH}" == "x64" ]]; then
+        install-all "${EXTRACT_PATH}/zstd"
+        install-all "${EXTRACT_PATH}/aria2"
+        mv "${BUILD_PATH}/share/doc/aria2/bash_completion/aria2c" "${BUILD_PATH}/share/bash_completion.d/aria2c.bash"
+
         install-bin "${EXTRACT_PATH}/lshw/lshw"
         install-man 1 "${EXTRACT_PATH}/lshw/lshw.1"
         cp -prv "${EXTRACT_PATH}/lshw/hwdata" "${BUILD_PATH}/share/hwdata"
