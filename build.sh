@@ -206,7 +206,10 @@ sockperf() {
         --enable-doc \
         --enable-tool \
         --prefix="${BUILD_REAL_PATH}/sockperf"
-    make LDFLAGS=-all-static -j4
+    make LDFLAGS=-all-static \
+        CFLAGS=-DVMA_XLIO_NO_FUNCTIONS_DEFINES \
+        CXXFLAGS=-DVMA_XLIO_NO_FUNCTIONS_DEFINES \
+        -j4
     make install
     popd
 }
