@@ -14,6 +14,7 @@ OWNERS["zstd"]=facebook
 OWNERS["lshw"]=lyonel
 OWNERS["socat"]="git://repo.or.cz/socat.git"
 OWNERS["sockperf"]=Mellanox
+OWNERS["iperf"]=esnet
 
 declare -A VCMD
 VCMD["aria2"]=gh-latest
@@ -21,12 +22,16 @@ VCMD["zstd"]=gh-latest
 VCMD["lshw"]=gh-master
 VCMD["socat"]=git-latest-tag
 VCMD["sockperf"]=gh-latest
+VCMD["iperf"]=gh-latest-tag
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
 }
 gh-master() {
     gh api "repos/$1/$2/commits" -q ".[0].sha"
+}
+gh-latest-tag() {
+    gh api "repos/$1/$2/git/refs/tags" -q .[-1].ref.[10:]
 }
 git-latest-tag() {
     TMPDIR=$(mktemp -d)
@@ -201,6 +206,20 @@ sockperf() {
         --enable-doc \
         --enable-tool \
         --prefix="${BUILD_REAL_PATH}/sockperf"
+    make LDFLAGS=-all-static -j4
+    make install
+    popd
+}
+
+iperf() {
+    download-untar iperf z "https://github.com/esnet/iperf/archive/refs/tags/${VERSION}.tar.gz"
+    pushd "${SRC_PATH}/iperf"
+    LDFLAGS=-static ./configure \
+        --disable-shared \
+        --enable-static \
+        --enable-doc \
+        --enable-tool \
+        --prefix="${BUILD_REAL_PATH}/iperf"
     make LDFLAGS=-all-static -j4
     make install
     popd

@@ -156,6 +156,7 @@ download() {
         mv "${EXTRACT_PATH}/sockperf/sbin/"* "${EXTRACT_PATH}/sockperf/bin/"
         rm -rf "${EXTRACT_PATH}/sockperf/sbin/"
         rm -rf "${EXTRACT_PATH}/sockperf/share/doc"
+        download-untar iperf z "https://github.com/Pusnow/bin/releases/download/bin/iperf-$(arch x64).tar.gz"
     fi
 
     wait
@@ -259,6 +260,7 @@ install() {
         cp -prv "${EXTRACT_PATH}/lshw/hwdata" "${BUILD_PATH}/share/hwdata"
         install-all "${EXTRACT_PATH}/socat"
         install-all "${EXTRACT_PATH}/sockperf"
+        install-all "${EXTRACT_PATH}/iperf"
     fi
 
     cp versions "${BUILD_PATH}/versions"
