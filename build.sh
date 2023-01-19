@@ -191,6 +191,7 @@ socat() {
 }
 
 sockperf() {
+    sudo apt-get update && sudo apt-get install -y doxygen
     download-untar sockperf z "https://github.com/Mellanox/sockperf/archive/refs/tags/${VERSION}.tar.gz"
     pushd "${SRC_PATH}/sockperf"
     ./autogen.sh
