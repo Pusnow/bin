@@ -233,9 +233,11 @@ if diff -q "${REPO}-version-${ARCH}" "${REPO}-version-${ARCH}.old" &>/dev/null; 
 else
     VERSION=$(cat ${REPO}-version-${ARCH})
     $1
-    pushd "build"
-    tar -cvzf "${REPO}-${ARCH}.tar.gz" "${REPO}"
-    gh release upload bin "${REPO}-${ARCH}.tar.gz" --clobber
-    popd
-    gh release upload bin "${REPO}-version-${ARCH}" --clobber
+    if [ -n "${BIN_BUILD}" ]; then
+        pushd "build"
+        tar -cvzf "${REPO}-${ARCH}.tar.gz" "${REPO}"
+        gh release upload bin "${REPO}-${ARCH}.tar.gz" --clobber
+        popd
+        gh release upload bin "${REPO}-version-${ARCH}" --clobber
+    fi
 fi

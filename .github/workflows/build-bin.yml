@@ -20,6 +20,7 @@ jobs:
         run: ./build.sh ${{ matrix.repo }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          BIN_BUILD: Y
       - uses: gautamkrishnar/keepalive-workflow@v1
   pack-x64:
     needs: build-x64
