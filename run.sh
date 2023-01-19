@@ -152,6 +152,10 @@ download() {
         download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
         download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
         download-untar socat z "https://github.com/Pusnow/bin/releases/download/bin/socat-$(arch x64).tar.gz"
+        download-untar sockperf z "https://github.com/Pusnow/bin/releases/download/bin/sockperf-$(arch x64).tar.gz"
+        mv "${EXTRACT_PATH}/sockperf/sbin/"* "${EXTRACT_PATH}/sockperf/bin/"
+        rm -rf "${EXTRACT_PATH}/sockperf/sbin/"
+        rm -rf "${EXTRACT_PATH}/sockperf/share/doc"
     fi
 
     wait
@@ -254,6 +258,7 @@ install() {
         install-man 1 "${EXTRACT_PATH}/lshw/lshw.1"
         cp -prv "${EXTRACT_PATH}/lshw/hwdata" "${BUILD_PATH}/share/hwdata"
         install-all "${EXTRACT_PATH}/socat"
+        install-all "${EXTRACT_PATH}/sockperf"
     fi
 
     cp versions "${BUILD_PATH}/versions"

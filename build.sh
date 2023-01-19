@@ -13,12 +13,14 @@ OWNERS["aria2"]=aria2
 OWNERS["zstd"]=facebook
 OWNERS["lshw"]=lyonel
 OWNERS["socat"]="git://repo.or.cz/socat.git"
+OWNERS["sockperf"]=Mellanox
 
 declare -A VCMD
 VCMD["aria2"]=gh-latest
 VCMD["zstd"]=gh-latest
 VCMD["lshw"]=gh-master
 VCMD["socat"]=git-latest-tag
+VCMD["sockperf"]=gh-latest
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
@@ -188,6 +190,20 @@ socat() {
     popd
 }
 
+sockperf() {
+    download-untar sockperf z "https://github.com/Mellanox/sockperf/archive/refs/tags/${VERSION}.tar.gz"
+    pushd "${SRC_PATH}/sockperf"
+    ./autogen.sh
+    LDFLAGS=-static ./configure \
+        --disable-shared \
+        --enable-static \
+        --enable-doc \
+        --enable-tool \
+        --prefix="${BUILD_REAL_PATH}/sockperf"
+    make LDFLAGS=-all-static -j4
+    make install
+    popd
+}
 REPO=$1
 OWNER=${OWNERS[$REPO]}
 ${VCMD[$REPO]} "${OWNER}" "${REPO}" >"${REPO}-version-${ARCH}"
