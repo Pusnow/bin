@@ -244,7 +244,7 @@ __iperf() {
 }
 
 __git() {
-    sudo apt-get update && sudo apt-get install -y asciidoc
+    sudo apt-get update && sudo apt-get install -y asciidoc gettext
     install-musl
     export PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/bin:$PATH" ; hash -r
     export LD_LIBRARY_PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/lib"
