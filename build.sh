@@ -15,6 +15,7 @@ OWNERS["lshw"]=lyonel
 OWNERS["socat"]="git://repo.or.cz/socat.git"
 OWNERS["sockperf"]=Mellanox
 OWNERS["iperf"]=esnet
+OWNERS["git"]=git
 
 declare -A VCMD
 VCMD["aria2"]=gh-latest
@@ -23,6 +24,7 @@ VCMD["lshw"]=gh-master
 VCMD["socat"]=git-latest-tag
 VCMD["sockperf"]=gh-latest
 VCMD["iperf"]=gh-latest-tag
+VCMD["git"]=gh-latest-tag
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
@@ -65,6 +67,14 @@ download-git() {
     git clone --recursive -b "${2}" --depth 1 "${3}" "${SRC_PATH}/${1}"
 }
 
+install-musl() {
+    mkdir -p "${LOCAL_REAL_PATH}"
+    pushd "${LOCAL_REAL_PATH}"
+    wget -qO x86_64-linux-musl-native.tgz https://musl.cc/x86_64-linux-musl-native.tgz
+    tar -xvzf x86_64-linux-musl-native.tgz
+    popd
+}
+
 install-openssl() {
     # openssl
     download-untar ssl z https://www.openssl.org/source/openssl-1.1.1s.tar.gz
@@ -76,7 +86,22 @@ install-openssl() {
 
 }
 
-aria2() {
+install-zlib() {
+    # # zlib1g
+    download-untar zlib z https://github.com/madler/zlib/releases/download/v1.2.13/zlib-1.2.13.tar.gz
+    pushd "${SRC_PATH}/zlib"
+    ./configure \
+        --prefix="${LOCAL_REAL_PATH}" \
+        --libdir="${LOCAL_REAL_PATH}/lib" \
+        --includedir="${LOCAL_REAL_PATH}/include" \
+        --static
+    make -j4
+    make install
+    popd
+
+}
+
+__aria2() {
     install-openssl
     # libc-cares
     download-untar cares z https://github.com/c-ares/c-ares/releases/download/cares-1_18_1/c-ares-1.18.1.tar.gz
@@ -100,17 +125,7 @@ aria2() {
     make install
     popd
 
-    # # zlib1g
-    download-untar zlib z https://github.com/madler/zlib/releases/download/v1.2.13/zlib-1.2.13.tar.gz
-    pushd "${SRC_PATH}/zlib"
-    ./configure \
-        --prefix="${LOCAL_REAL_PATH}" \
-        --libdir="${LOCAL_REAL_PATH}/lib" \
-        --includedir="${LOCAL_REAL_PATH}/include" \
-        --static
-    make -j4
-    make install
-    popd
+    install-zlib
 
     # # libsqlite3
     download-untar sqlite z https://www.sqlite.org/2022/sqlite-autoconf-3400000.tar.gz
@@ -143,7 +158,7 @@ aria2() {
     popd
 }
 
-zstd() {
+__zstd() {
     pip install --user meson ninja
     download-untar zstd z "https://github.com/facebook/zstd/releases/download/${VERSION}/zstd-${VERSION:1}.tar.gz"
     pushd "${SRC_PATH}/zstd/build/meson"
@@ -162,7 +177,7 @@ zstd() {
     popd
 }
 
-lshw() {
+__lshw() {
     download-git lshw master https://github.com/lyonel/lshw.git
     pushd "${SRC_PATH}/lshw"
     rm src/manuf.txt src/oui.txt src/pci.ids src/pnp.ids src/usb.ids
@@ -182,7 +197,7 @@ lshw() {
     popd
 }
 
-socat() {
+__socat() {
     sudo apt-get update && sudo apt-get install -y yodl
     install-openssl
     download-git socat "${VERSION}" "git://repo.or.cz/socat.git"
@@ -195,7 +210,7 @@ socat() {
     popd
 }
 
-sockperf() {
+__sockperf() {
     sudo apt-get update && sudo apt-get install -y doxygen
     download-untar sockperf z "https://github.com/Mellanox/sockperf/archive/refs/tags/${VERSION}.tar.gz"
     pushd "${SRC_PATH}/sockperf"
@@ -214,7 +229,7 @@ sockperf() {
     popd
 }
 
-iperf() {
+__iperf() {
     download-untar iperf z "https://github.com/esnet/iperf/archive/refs/tags/${VERSION}.tar.gz"
     pushd "${SRC_PATH}/iperf"
     LDFLAGS=-static ./configure \
@@ -227,6 +242,27 @@ iperf() {
     make install
     popd
 }
+
+__git() {
+    sudo apt-get update && sudo apt-get install -y asciidoc
+    install-musl
+    export PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/bin:$PATH" ; hash -r
+    export LD_LIBRARY_PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/lib"
+    install-openssl
+    install-zlib
+    download-untar git z "https://github.com/git/git/archive/refs/tags/${VERSION}.tar.gz"
+    pushd "${SRC_PATH}/git"
+    make configure
+    ./configure \
+        --without-tcltk \
+        CFLAGS="-static -static-libgcc" \
+        --with-openssl="${LOCAL_REAL_PATH}" \
+        --with-zlib="${LOCAL_REAL_PATH}"
+    make -j4 prefix="${BUILD_REAL_PATH}/git" all man
+    make prefix="${BUILD_REAL_PATH}/git" install install-man
+    popd
+
+}
 REPO=$1
 OWNER=${OWNERS[$REPO]}
 ${VCMD[$REPO]} "${OWNER}" "${REPO}" >"${REPO}-version-${ARCH}"
@@ -235,7 +271,7 @@ if diff -q "${REPO}-version-${ARCH}" "${REPO}-version-${ARCH}.old" &>/dev/null; 
     echo "Skipping upgrade..."
 else
     VERSION=$(cat ${REPO}-version-${ARCH})
-    $1
+    __$1
     if [ -n "${BIN_BUILD}" ]; then
         pushd "build"
         tar -cvzf "${REPO}-${ARCH}.tar.gz" "${REPO}"
