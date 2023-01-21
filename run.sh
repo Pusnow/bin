@@ -157,7 +157,7 @@ download() {
         rm -rf "${EXTRACT_PATH}/sockperf/sbin/"
         rm -rf "${EXTRACT_PATH}/sockperf/share/doc"
         download-untar iperf z "https://github.com/Pusnow/bin/releases/download/bin/iperf-$(arch x64).tar.gz"
-        download-untar git z "https://github.com/Pusnow/bin/releases/download/bin/git-$(arch x64).tar.gz"
+        # download-untar git z "https://github.com/Pusnow/bin/releases/download/bin/git-$(arch x64).tar.gz"
     fi
 
     wait
@@ -262,7 +262,7 @@ install() {
         install-all "${EXTRACT_PATH}/socat"
         install-all "${EXTRACT_PATH}/sockperf"
         install-all "${EXTRACT_PATH}/iperf"
-        install-all "${EXTRACT_PATH}/git"
+        # install-all "${EXTRACT_PATH}/git"
     fi
 
     cp versions "${BUILD_PATH}/versions"

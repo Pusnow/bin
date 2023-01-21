@@ -86,6 +86,34 @@ install-openssl() {
 
 }
 
+install-cares() {
+    # libc-cares
+    download-untar cares z https://github.com/c-ares/c-ares/releases/download/cares-1_18_1/c-ares-1.18.1.tar.gz
+    pushd "${SRC_PATH}/cares"
+    
+    ./configure \
+        --disable-shared \
+        --enable-static \
+        --without-random \
+        --prefix="${LOCAL_REAL_PATH}"
+    make -j4
+    make install
+    popd
+}
+
+install-expat() {
+    # # libexpat
+    download-untar expat z https://github.com/libexpat/libexpat/releases/download/R_2_5_0/expat-2.5.0.tar.gz
+    pushd "${SRC_PATH}/expat"
+    ./configure \
+        --disable-shared \
+        --enable-static \
+        --prefix="${LOCAL_REAL_PATH}"
+    make -j4
+    make install
+    popd
+}
+
 install-zlib() {
     # # zlib1g
     download-untar zlib z https://github.com/madler/zlib/releases/download/v1.2.13/zlib-1.2.13.tar.gz
@@ -101,32 +129,7 @@ install-zlib() {
 
 }
 
-__aria2() {
-    install-openssl
-    # libc-cares
-    download-untar cares z https://github.com/c-ares/c-ares/releases/download/cares-1_18_1/c-ares-1.18.1.tar.gz
-    pushd "${SRC_PATH}/cares"
-    ./configure \
-        --disable-shared \
-        --enable-static \
-        --without-random \
-        --prefix="${LOCAL_REAL_PATH}"
-    make -j4
-    make install
-    popd
-    # # libexpat
-    download-untar expat z https://github.com/libexpat/libexpat/releases/download/R_2_5_0/expat-2.5.0.tar.gz
-    pushd "${SRC_PATH}/expat"
-    ./configure \
-        --disable-shared \
-        --enable-static \
-        --prefix="${LOCAL_REAL_PATH}"
-    make -j4
-    make install
-    popd
-
-    install-zlib
-
+install-sqlite() {
     # # libsqlite3
     download-untar sqlite z https://www.sqlite.org/2022/sqlite-autoconf-3400000.tar.gz
     pushd "${SRC_PATH}/sqlite"
@@ -137,6 +140,29 @@ __aria2() {
     make -j4
     make install
     popd
+}
+
+install-curl() {
+    # # curl
+    download-untar curl z https://curl.se/download/curl-7.87.0.tar.gz
+    pushd "${SRC_PATH}/curl"
+    env PKG_CONFIG_PATH="${LOCAL_REAL_PATH}/lib/pkgconfig" ./configure \
+        --disable-shared \
+        --enable-static \
+        --prefix="${LOCAL_REAL_PATH}"
+    make -j4
+    make install
+    popd
+
+}
+
+__aria2() {
+    install-openssl
+
+    install-cares
+    install-expat
+    install-zlib
+    install-sqlite
 
     download-untar aria2 z https://github.com/aria2/aria2/releases/download/${VERSION}/aria2-${VERSION:8}.tar.gz
     pushd "${SRC_PATH}/aria2"
@@ -246,9 +272,12 @@ __iperf() {
 __git() {
     sudo apt-get update && sudo apt-get install -y asciidoc gettext
     install-musl
-    export PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/bin:$PATH" ; hash -r
+    export PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/bin:$PATH"
+    hash -r
     export LD_LIBRARY_PATH="${LOCAL_REAL_PATH}/x86_64-linux-musl-native/lib"
     install-openssl
+    install-expat
+    inscall-curl
     install-zlib
     download-untar git z "https://github.com/git/git/archive/refs/tags/${VERSION}.tar.gz"
     pushd "${SRC_PATH}/git"
