@@ -20,7 +20,7 @@ else
     GIT_VERSION=$(cat "${DISTRO}-${DISTRO_VERSION}-version-${ARCH}")
 
     docker build -t bin --build-arg DISTRO=${DISTRO} --build-arg VERSION=${DISTRO_VERSION} --build-arg GIT_VERSION=${GIT_VERSION:1} .
-    docker run --rm --name bin -v${PWD}/build:/out cp -r /opt/pusnow /out
+    docker run --rm --name bin -v${PWD}/build:/out bin cp -r /opt/pusnow /out
 
     if [ -n "${BIN_BUILD}" ]; then
         pushd "build"
