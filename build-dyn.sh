@@ -24,7 +24,7 @@ else
 
     if [ -n "${BIN_BUILD}" ]; then
         pushd "build"
-        tar -cvzf "${DISTRO}-${DISTRO_VERSION}-${ARCH}.tar.gz" "pusnow"
+        sudo tar -cvzf "${DISTRO}-${DISTRO_VERSION}-${ARCH}.tar.gz" "pusnow"
         gh release upload bin "${DISTRO}-${DISTRO_VERSION}-${ARCH}.tar.gz" --clobber
         popd
         gh release upload bin "${DISTRO}-${DISTRO_VERSION}-version-${ARCH}" --clobber
