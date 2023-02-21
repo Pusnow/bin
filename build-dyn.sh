@@ -20,11 +20,11 @@ else
     GIT_VERSION=$(cat "${DISTRO}-${DISTRO_VERSION}-version-${ARCH}")
 
     docker build -t bin --build-arg DISTRO=${DISTRO} --build-arg VERSION=${DISTRO_VERSION} --build-arg GIT_VERSION=${GIT_VERSION:1} .
-    docker run --rm --name bin -v${PWD}/build:/out bin cp -r /opt/pusnow /out
+    docker run --rm --name bin -v${PWD}/build:/out bin cp -r /opt/pusnow.tar.gz /out
 
     if [ -n "${BIN_BUILD}" ]; then
         pushd "build"
-        sudo tar -cvzf "${DISTRO}-${DISTRO_VERSION}-${ARCH}.tar.gz" "pusnow"
+        sudo mv pusnow.tar.gz "${DISTRO}-${DISTRO_VERSION}-${ARCH}.tar.gz"
         gh release upload bin "${DISTRO}-${DISTRO_VERSION}-${ARCH}.tar.gz" --clobber
         popd
         gh release upload bin "${DISTRO}-${DISTRO_VERSION}-version-${ARCH}" --clobber

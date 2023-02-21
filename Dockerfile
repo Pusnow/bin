@@ -54,3 +54,6 @@ RUN mkdir -p "/build/git" && \
     env PATH="/opt/pusnow/bin:$PATH"  ./configure --prefix="/opt/pusnow" --without-tcltk --with-openssl=/opt/pusnow  --with-curl=/opt/pusnow --with-expat=/opt/pusnow --with-zlib=/opt/pusnow  && \
     make NO_INSTALL_HARDLINKS=YES -j4 && \
     make install
+
+RUN cd "/opt" && \
+    tar -cvzf pusnow.tar.gz pusnow 
