@@ -10,6 +10,7 @@ ARG EXPAT_VERSION=2.5.0
 ARG EXPAT_VERSION_2=2_5_0
 ARG OPENSSL_VERSION=1.1.1s
 
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends asciidoc gettext wget ca-certificates perl build-essential pkg-config autoconf automake
 
@@ -52,7 +53,7 @@ RUN mkdir -p "/build/git" && \
     cd "/build/git" && \
     make configure && \
     env PATH="/opt/pusnow/bin:$PATH"  ./configure --prefix="/opt/pusnow" --without-tcltk --with-openssl=/opt/pusnow  --with-curl=/opt/pusnow --with-expat=/opt/pusnow --with-zlib=/opt/pusnow  && \
-    make NO_INSTALL_HARDLINKS=YES -j4 && \
+    make -j4 && \
     make install
 
 RUN cd "/opt" && \
