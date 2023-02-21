@@ -12,7 +12,7 @@ ARG OPENSSL_VERSION=1.1.1s
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends asciidoc gettext wget ca-certificates perl build-essential pkg-config autoconf automake
+RUN apt-get update && apt-get install -y --no-install-recommends asciidoc gettext wget ca-certificates perl build-essential pkg-config autoconf automake xmlto
 
 
 RUN mkdir -p "/build/openssl" && \
@@ -54,7 +54,9 @@ RUN mkdir -p "/build/git" && \
     make configure && \
     env PATH="/opt/pusnow/bin:$PATH"  ./configure --prefix="/opt/pusnow" --without-tcltk --with-openssl=/opt/pusnow  --with-curl=/opt/pusnow --with-expat=/opt/pusnow --with-zlib=/opt/pusnow  && \
     make -j4 && \
-    make install
+    make man -j4 && \
+    make install && \
+    make install-man
 
 RUN cd "/opt" && \
     tar -cvzf pusnow.tar.gz pusnow 
