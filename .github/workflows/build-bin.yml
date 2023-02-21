@@ -46,3 +46,35 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ARCH: aarch64
+  build-dyn:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+          - distro: debian
+            version: bookworm
+          - distro: debian
+            version: bullseye
+          - distro: debian
+            version: buster
+          - distro: debian
+            version: stretch
+          - distro: ubuntu
+            version: jammy
+          - distro: ubuntu
+            version: focal
+          - distro: ubuntu
+            version: bionic
+          - distro: ubuntu
+            version: xenial
+          - distro: ubuntu
+            version: trusty
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-dyn.sh
+        run: ./build-dyn.sh ${{ matrix.distro.distro }} ${{ matrix.distro.version }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BIN_BUILD: Y
+      - uses: gautamkrishnar/keepalive-workflow@v1
