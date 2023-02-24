@@ -52,15 +52,11 @@ jobs:
       matrix:
         distro:
           - distro: debian
-            version: bookworm
-          - distro: debian
             version: bullseye
           - distro: debian
             version: buster
           - distro: debian
             version: stretch
-          - distro: ubuntu
-            version: jammy
           - distro: ubuntu
             version: focal
           - distro: ubuntu
