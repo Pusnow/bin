@@ -147,6 +147,8 @@ download() {
 
     download-untar btm z "https://github.com/ClementTsang/bottom/releases/download/${BTM_VERSION}/bottom_$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
 
+    download-untar batscore z "https://github.com/bats-core/bats-core/archive/refs/tags/${BATSCORE_VERSION}.tar.gz"
+
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar zstd z "https://github.com/Pusnow/bin/releases/download/bin/zstd-$(arch x64).tar.gz"
         download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
@@ -250,6 +252,8 @@ install() {
     install-bin "${EXTRACT_PATH}/btm/btm"
     install-bash-c btm "${EXTRACT_PATH}/btm/completion/btm.bash"
     install-zsh-c btm "${EXTRACT_PATH}/btm/completion/_btm"
+
+    "${EXTRACT_PATH}/batscore/install.sh" "${BUILD_PATH}"
 
     if [[ "${ARCH}" == "x64" ]]; then
         install-all "${EXTRACT_PATH}/zstd"
