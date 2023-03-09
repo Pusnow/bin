@@ -69,4 +69,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           BIN_BUILD: Y
+  keepalive:
+    needs: [build-x64, pack-x64, pack-aarch64, build-dyn]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - uses: gautamkrishnar/keepalive-workflow@v1
