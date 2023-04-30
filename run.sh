@@ -115,9 +115,9 @@ download() {
     download-unzip rclone "https://github.com/rclone/rclone/releases/download/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-$(arch amd64 arm64).zip"
 
     download-untar pandoc z "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-$(arch amd64 arm64).tar.gz"
-    if [[ "${ARCH}" == "x64" ]]; then
-        download-untar bpftrace J "https://github.com/iovisor/bpftrace/releases/download/${BPFTRACE_VERSION}/binary_tools_man-bundle.tar.xz"
-    fi
+    # if [[ "${ARCH}" == "x64" ]]; then
+    #     download-untar bpftrace J "https://github.com/iovisor/bpftrace/releases/download/${BPFTRACE_VERSION}/binary_tools_man-bundle.tar.xz"
+    # fi
     download-file hadolint "https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-$(arch x86_64 arm64)"
     download-file bazel "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-$(arch amd64 arm64)"
 
@@ -193,9 +193,9 @@ install() {
 
     install-all "${EXTRACT_PATH}/pandoc"
 
-    if [[ "${ARCH}" == "x64" ]]; then
-        install-all "${EXTRACT_PATH}/bpftrace"
-    fi
+    # if [[ "${ARCH}" == "x64" ]]; then
+    #     install-all "${EXTRACT_PATH}/bpftrace"
+    # fi
 
     install-bin "${EXTRACT_PATH}/hadolint/hadolint"
 
