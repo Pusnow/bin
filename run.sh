@@ -115,9 +115,7 @@ download() {
     download-unzip rclone "https://github.com/rclone/rclone/releases/download/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-$(arch amd64 arm64).zip"
 
     download-untar pandoc z "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-$(arch amd64 arm64).tar.gz"
-    # if [[ "${ARCH}" == "x64" ]]; then
-    #     download-untar bpftrace J "https://github.com/iovisor/bpftrace/releases/download/${BPFTRACE_VERSION}/binary_tools_man-bundle.tar.xz"
-    # fi
+
     download-file hadolint "https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-$(arch x86_64 arm64)"
     download-file bazel "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-$(arch amd64 arm64)"
 
@@ -127,13 +125,12 @@ download() {
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar rg z "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-$(arch x86_64)-unknown-linux-musl.tar.gz"
     fi
-    download-file kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/$(arch amd64 arm64)/kubectl"
+
     if [[ "${ARCH}" == "x64" ]]; then
         download-unzip ninja "https://github.com/ninja-build/ninja/releases/download/${NINJA_VERSION}/ninja-linux.zip"
     fi
     download-untar cmake z "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch x86_64 aarch64).tar.gz"
 
-    download-untar hugo z "https://github.com/gohugoio/hugo/releases/download/${HUGO_VERSION}/hugo_${HUGO_VERSION:1}_linux-$(arch amd64 arm64).tar.gz"
     download-untar tokei z "https://github.com/XAMPPRocky/tokei/releases/download/${TOKEI_VERSION}/tokei-$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
     download-untar dnslookup z "https://github.com/ameshkov/dnslookup/releases/download/${DNSLOOKUP_VERSION}/dnslookup-linux-$(arch amd64 arm64)-${DNSLOOKUP_VERSION}.tar.gz"
 
@@ -145,13 +142,10 @@ download() {
 
     download-file dasel "https://github.com/TomWright/dasel/releases/download/${DASEL_VERSION}/dasel_linux_$(arch amd64 arm64)"
 
-    download-untar btm z "https://github.com/ClementTsang/bottom/releases/download/${BTM_VERSION}/bottom_$(arch x86_64 aarch64)-unknown-linux-gnu.tar.gz"
-
     download-untar batscore z "https://github.com/bats-core/bats-core/archive/refs/tags/${BATSCORE_VERSION}.tar.gz"
 
     if [[ "${ARCH}" == "x64" ]]; then
         download-untar zstd z "https://github.com/Pusnow/bin/releases/download/bin/zstd-$(arch x64).tar.gz"
-        download-untar aria2 z "https://github.com/Pusnow/bin/releases/download/bin/aria2-$(arch x64).tar.gz"
         download-untar lshw z "https://github.com/Pusnow/bin/releases/download/bin/lshw-$(arch x64).tar.gz"
         download-untar socat z "https://github.com/Pusnow/bin/releases/download/bin/socat-$(arch x64).tar.gz"
         download-untar sockperf z "https://github.com/Pusnow/bin/releases/download/bin/sockperf-$(arch x64).tar.gz"
@@ -159,7 +153,6 @@ download() {
         rm -rf "${EXTRACT_PATH}/sockperf/sbin/"
         rm -rf "${EXTRACT_PATH}/sockperf/share/doc"
         download-untar iperf z "https://github.com/Pusnow/bin/releases/download/bin/iperf-$(arch x64).tar.gz"
-        # download-untar git z "https://github.com/Pusnow/bin/releases/download/bin/git-$(arch x64).tar.gz"
     fi
 
     wait
@@ -193,10 +186,6 @@ install() {
 
     install-all "${EXTRACT_PATH}/pandoc"
 
-    # if [[ "${ARCH}" == "x64" ]]; then
-    #     install-all "${EXTRACT_PATH}/bpftrace"
-    # fi
-
     install-bin "${EXTRACT_PATH}/hadolint/hadolint"
 
     install-bin "${EXTRACT_PATH}/bazel/bazel"
@@ -216,8 +205,6 @@ install() {
         install-zsh-c rg "${EXTRACT_PATH}/rg/complete/_rg"
     fi
 
-    install-bin "${EXTRACT_PATH}/kubectl/kubectl"
-
     if [[ "${ARCH}" == "x64" ]]; then
         install-bin "${EXTRACT_PATH}/ninja/ninja"
     fi
@@ -230,8 +217,6 @@ install() {
     install-bash-c cpack "${EXTRACT_PATH}/cmake/share/bash-completion/completions/cpack"
     install-bash-c ctest "${EXTRACT_PATH}/cmake/share/bash-completion/completions/ctest"
     cp -prv "${EXTRACT_PATH}/cmake/share/cmake-"* "${BUILD_PATH}/share/"
-
-    install-bin "${EXTRACT_PATH}/hugo/hugo"
 
     install-bin "${EXTRACT_PATH}/tokei/tokei"
 
@@ -249,16 +234,10 @@ install() {
 
     install-bin "${EXTRACT_PATH}/dasel/dasel"
 
-    install-bin "${EXTRACT_PATH}/btm/btm"
-    install-bash-c btm "${EXTRACT_PATH}/btm/completion/btm.bash"
-    install-zsh-c btm "${EXTRACT_PATH}/btm/completion/_btm"
-
     "${EXTRACT_PATH}/batscore/install.sh" "${BUILD_PATH}"
 
     if [[ "${ARCH}" == "x64" ]]; then
         install-all "${EXTRACT_PATH}/zstd"
-        install-all "${EXTRACT_PATH}/aria2"
-        mv "${BUILD_PATH}/share/doc/aria2/bash_completion/aria2c" "${BUILD_PATH}/share/bash_completion.d/aria2c.bash"
 
         install-bin "${EXTRACT_PATH}/lshw/lshw"
         install-man 1 "${EXTRACT_PATH}/lshw/lshw.1"
@@ -266,7 +245,6 @@ install() {
         install-all "${EXTRACT_PATH}/socat"
         install-all "${EXTRACT_PATH}/sockperf"
         install-all "${EXTRACT_PATH}/iperf"
-        # install-all "${EXTRACT_PATH}/git"
     fi
 
     cp versions "${BUILD_PATH}/versions"
@@ -293,20 +271,6 @@ gen-completions() {
         ${BUILD_PATH}/bin/gh completion -s zsh >"/tmp/_gh"
         install-bash-c gh "/tmp/gh.bash"
         install-zsh-c gh "/tmp/_gh"
-    fi
-
-    if [[ -x "${BUILD_PATH}/bin/kubectl" ]]; then
-        ${BUILD_PATH}/bin/kubectl completion bash >"/tmp/kubectl.bash"
-        ${BUILD_PATH}/bin/kubectl completion zsh >"/tmp/_kubectl"
-        install-bash-c kubectl "/tmp/kubectl.bash"
-        install-zsh-c kubectl "/tmp/_kubectl"
-    fi
-
-    if [[ -x "${BUILD_PATH}/bin/hugo" ]]; then
-        ${BUILD_PATH}/bin/hugo completion bash >"/tmp/hugo.bash"
-        ${BUILD_PATH}/bin/hugo completion zsh >"/tmp/_hugo"
-        install-bash-c hugo "/tmp/hugo.bash"
-        install-zsh-c hugo "/tmp/_hugo"
     fi
 
     if [[ -x "${BUILD_PATH}/bin/dasel" ]]; then
