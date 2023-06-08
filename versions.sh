@@ -36,6 +36,7 @@ echo "SHFMT_VERSION=$(gh-latest mvdan sh)"
 echo "SHELLCHECK_VERSION=$(gh-latest koalaman shellcheck)"
 echo "DASEL_VERSION=$(gh-latest TomWright dasel)"
 echo "BATSCORE_VERSION=$(gh-latest bats-core bats-core)"
+echo "RUFF_VERSION=$(gh-latest astral-sh ruff)"
 
 echo "ZSTD_VERSION=$(pusnow-latest zstd)"
 echo "LSHW_VERSION=$(pusnow-latest lshw)"
