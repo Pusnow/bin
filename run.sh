@@ -258,12 +258,12 @@ install() {
 }
 
 gen-completions() {
-    if [[ -x "${BUILD_PATH}/bin/rclone" ]]; then
-        "${BUILD_PATH}/bin/rclone" completion bash >/tmp/rclone.bash
-        "${BUILD_PATH}/bin/rclone" completion zsh >/tmp/_rclone
-        install-bash-c rclone "/tmp/rclone.bash"
-        install-zsh-c rclone "/tmp/_rclone"
-    fi
+    # if [[ -x "${BUILD_PATH}/bin/rclone" ]]; then
+    #     "${BUILD_PATH}/bin/rclone" completion bash >/tmp/rclone.bash
+    #     "${BUILD_PATH}/bin/rclone" completion zsh >/tmp/_rclone
+    #     install-bash-c rclone "/tmp/rclone.bash"
+    #     install-zsh-c rclone "/tmp/_rclone"
+    # fi
 
     if [[ -x "${BUILD_PATH}/bin/pandoc" ]]; then
         "${BUILD_PATH}/bin/pandoc" --bash-completion >/tmp/pandoc.bash
