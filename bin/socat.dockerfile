@@ -1,4 +1,4 @@
-FROM base
+FROM cpp
 
 RUN mkdir /build
 RUN git-latest-tag.sh "git://repo.or.cz/socat.git" >/build/version.txt

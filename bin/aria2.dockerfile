@@ -1,4 +1,4 @@
-FROM base
+FROM cpp
 ARG VERSION
 RUN mkdir /build
 

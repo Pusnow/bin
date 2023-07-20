@@ -1,4 +1,4 @@
-FROM base
+FROM cpp
 
 RUN mkdir /build
 RUN download-git.sh lshw master https://github.com/lyonel/lshw.git
