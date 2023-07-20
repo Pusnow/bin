@@ -1,5 +1,6 @@
 FROM cpp
 ARG VERSION
+ARG GH_REPO
 RUN mkdir /build
 
 RUN download-ghr.sh ${GH_REPO} ${VERSION}
