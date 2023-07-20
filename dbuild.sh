@@ -33,10 +33,10 @@ if [ -n "$LANG" ]; then
 fi
 
 case $IMAGE in
-aria2) GH_REPO=$(gh-latest aria2 aria2) ;;
+aria2) GH_REPO="aria2/aria2" ;;
 iperf) VERSION=$(gh-latest-tag esnet iperf) ;;
 sockperf) VERSION=$(gh-latest Mellanox sockperf) ;;
-zstd) VERSION=$(gh-latest facebook zstd) ;;
+zstd) GH_REPO="facebook/zstd" ;;
 hexyl) GH_REPO="sharkdp/hexyl" ;;
 delta) GH_REPO="dandavison/delta" ;;
 fd) GH_REPO="sharkdp/fd" ;;
