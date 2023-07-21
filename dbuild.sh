@@ -47,6 +47,8 @@ fzf) GH_REPO="junegunn/fzf" ;;
 gh) GH_REPO="cli/cli" ;;
 dnslookup) GH_REPO="ameshkov/dnslookup" ;;
 shfmt) GH_REPO="mvdan/sh" ;;
+neovim) GH_REPO="neovim/neovim" ;;
+jq) GH_REPO="jqlang/jq" ;;
 *) VERSION="" ;;
 esac
 
