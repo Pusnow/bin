@@ -69,6 +69,16 @@ cmake)
     GH_REPO="Kitware/CMake"
     VERSION_ARCH=$(arch x86_64 aarch64)
     ;;
+hadolint)
+    GH_REPO="hadolint/hadolint"
+    VERSION_ARCH=$(arch x86_64 arm64)
+    ;;
+neofetch) GH_REPO="dylanaraps/neofetch" ;;
+bats-core) GH_REPO="bats-core/bats-core" ;;
+shellcheck)
+    GH_REPO="koalaman/shellcheck"
+    VERSION_ARCH=$(arch x86_64 aarch64)
+    ;;
 *) VERSION="" ;;
 esac
 
