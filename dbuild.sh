@@ -27,9 +27,19 @@ if [ -z "$ARCH" ]; then
     ARCH=x86_64
 fi
 
+arch() {
+    if [[ "${ARCH}" == "x86_64" ]]; then
+        echo $1
+    elif [[ "${ARCH}" == "aarch64" ]]; then
+        echo $2
+    else
+        echo "Unknown"
+    fi
+}
+
 podman build -f base.dockerfile -t base helper
-if [ -n "$LANG" ]; then
-    podman build -f $LANG.dockerfile -t $LANG helper
+if [ -n "$BASE" ]; then
+    podman build -f $BASE.dockerfile -t $BASE helper
 fi
 
 case $IMAGE in
@@ -51,6 +61,14 @@ neovim) GH_REPO="neovim/neovim" ;;
 jq) GH_REPO="jqlang/jq" ;;
 rclone) GH_REPO="rclone/rclone" ;;
 ninja) GH_REPO="ninja-build/ninja" ;;
+pandoc)
+    GH_REPO="jgm/pandoc"
+    VERSION_ARCH=$(arch amd64 arm64)
+    ;;
+cmake)
+    GH_REPO="Kitware/CMake"
+    VERSION_ARCH=$(arch x86_64 aarch64)
+    ;;
 *) VERSION="" ;;
 esac
 
@@ -68,11 +86,16 @@ if [ -n "${GH_REPO}" ]; then
     GH_REPO_ARGS="--build-arg GH_REPO=${GH_REPO}"
 fi
 
+VERSION_ARCH_ARGS=""
+if [ -n "${VERSION_ARCH}" ]; then
+    VERSION_ARCH_ARGS="--build-arg VERSION_ARCH=${VERSION_ARCH}"
+fi
+
 DOCKERFILE=""
 if [ -f "bin/${IMAGE}.dockerfile" ]; then
     DOCKERFILE="bin/${IMAGE}.dockerfile"
-elif [ -n "${LANG}" ]; then
-    DOCKERFILE="bin/${LANG}-default.dockerfile"
+elif [ -n "${BASE}" ]; then
+    DOCKERFILE="bin/${BASE}-default.dockerfile"
 fi
 
-podman build -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} - <"${DOCKERFILE}"
+podman build -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"

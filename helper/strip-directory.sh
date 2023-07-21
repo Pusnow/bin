@@ -4,6 +4,7 @@ ND=$(find "${1}" -maxdepth 1 -mindepth 1 -type d | wc -l | xargs || true)
 
 if [[ "${NE}" == "1" ]] && [[ "${ND}" == "1" ]]; then
     DIR=$(find "${1}" -maxdepth 1 -mindepth 1)
-    mv "${DIR}/"* "${1}"
-    rm -r "${DIR}"
+    mv "${DIR}" stripping
+    rm -r "${1}"
+    mv stripping "${1}"
 fi
