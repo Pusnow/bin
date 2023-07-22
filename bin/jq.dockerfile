@@ -1,4 +1,4 @@
-FROM cpp
+FROM cpp AS BUILD
 ARG VERSION
 ARG GH_REPO
 
@@ -7,5 +7,7 @@ RUN apk add --no-cache oniguruma-dev flex bison libtool
 
 RUN cd ${GH_REPO} && autoreconf -i && ./configure --prefix=/opt/pusnow
 
-
 RUN cd ${GH_REPO} && make LDFLAGS=-all-static -j && make install
+
+FROM scratch
+COPY --from=BUILD /opt /opt

@@ -1,4 +1,4 @@
-FROM cpp
+FROM cpp AS BUILD
 
 RUN mkdir /build
 
@@ -8,3 +8,6 @@ RUN download-git.sh socat "${VERSION}" "git://repo.or.cz/socat.git"
 ENV LDFLAGS=-static
 RUN cd socat && autoconf && ./configure --prefix=/opt/pusnow && make -j progs
 RUN mkdir -p /opt/pusnow/bin && cd socat && install -m 755 socat procan filan /opt/pusnow/bin
+
+FROM scratch
+COPY --from=BUILD /opt /opt

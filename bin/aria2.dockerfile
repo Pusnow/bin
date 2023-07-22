@@ -1,4 +1,4 @@
-FROM cpp
+FROM cpp AS BUILD
 ARG VERSION
 ARG GH_REPO
 RUN mkdir /build
@@ -9,3 +9,6 @@ RUN apk add --no-cache openssl-dev openssl-libs-static libxml2-dev libxml2-stati
 
 RUN cd ${GH_REPO} && ./configure --prefix=/opt/pusnow --disable-shared --disable-static --with-libuv ARIA2_STATIC=yes && make -j
 RUN cd ${GH_REPO} && make install
+
+FROM scratch
+COPY --from=BUILD /opt /opt
