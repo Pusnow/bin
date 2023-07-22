@@ -13,6 +13,14 @@ gh-latest-tag() {
     gh api "repos/$1/$2/git/refs/tags" -q .[-1].ref.[10:]
 }
 
+git-latest-tag() {
+    TMPDIR=$(mktemp -d)
+    git clone "$1" "${TMPDIR}"
+    git -C "${TMPDIR}" describe --tags $(git -C "${TMPDIR}" rev-list --tags --max-count=1)
+    rm -rf "${TMPDIR}"
+
+}
+
 set -ex
 
 IMAGE=$1
@@ -43,9 +51,11 @@ if [ -n "$BASE" ]; then
 fi
 
 case $IMAGE in
+socat) VERSION=$(git-latest-tag "git://repo.or.cz/socat.git") ;;
+lshw) VERSION="latest" ;;
 aria2) GH_REPO="aria2/aria2" ;;
 iperf) VERSION=$(gh-latest-tag esnet iperf) ;;
-sockperf) VERSION=$(gh-latest Mellanox sockperf) ;;
+sockperf) GH_REPO="Mellanox/sockperf" ;;
 zstd) GH_REPO="facebook/zstd" ;;
 hexyl) GH_REPO="sharkdp/hexyl" ;;
 delta) GH_REPO="dandavison/delta" ;;
