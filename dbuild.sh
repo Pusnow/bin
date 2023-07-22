@@ -126,7 +126,3 @@ elif [ -n "${BASE}" ]; then
 fi
 
 podman build -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
-
-if [ -n "$RELEASE" ]; then
-    echo ""
-fi
