@@ -20,6 +20,13 @@ git-latest-tag() {
     rm -rf "${TMPDIR}"
 
 }
+git-latest-commit() {
+    TMPDIR=$(mktemp -d)
+    git clone "$1" "${TMPDIR}"
+    git -C "${TMPDIR}" rev-parse HEAD
+    rm -rf "${TMPDIR}"
+
+}
 
 set -ex
 
@@ -52,7 +59,7 @@ fi
 
 case $IMAGE in
 socat) VERSION=$(git-latest-tag "git://repo.or.cz/socat.git") ;;
-lshw) VERSION="latest" ;;
+lshw) VERSION=$(git-latest-commit "https://github.com/lyonel/lshw.git") ;;
 aria2) GH_REPO="aria2/aria2" ;;
 iperf) VERSION=$(gh-latest-tag esnet iperf) ;;
 sockperf) GH_REPO="Mellanox/sockperf" ;;
@@ -119,3 +126,7 @@ elif [ -n "${BASE}" ]; then
 fi
 
 podman build -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
+
+if [ -n "$RELEASE" ]; then
+    echo ""
+fi
