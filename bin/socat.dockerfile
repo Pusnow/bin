@@ -1,4 +1,5 @@
 FROM cpp AS BUILD
+ARG VERSION
 
 RUN mkdir /build
 
