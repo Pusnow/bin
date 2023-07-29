@@ -53,9 +53,6 @@ arch() {
 }
 
 podman build -f base.dockerfile -t base helper
-if [ -n "$BASE" ]; then
-    podman build -f $BASE.dockerfile -t $BASE helper
-fi
 
 case $IMAGE in
 socat) VERSION=$(git-latest-tag "git://repo.or.cz/socat.git") ;;
@@ -98,6 +95,19 @@ shellcheck)
     ;;
 *) VERSION="" ;;
 esac
+
+if [ -z "$BASE" ]; then
+    case $IMAGE in
+    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd) BASE="cpp" ;;
+    dnslookup | fzf | gh | rclone) BASE="go" ;;
+    ruff | hexyl | delta | fd | ripgrep | tokei) BASE="rust" ;;
+    *) BASE="" ;;
+    esac
+fi
+
+if [ -n "$BASE" ]; then
+    podman build -f $BASE.dockerfile -t $BASE helper
+fi
 
 if [ -z "${VERSION}" ] && [ -n "${GH_REPO}" ]; then
     VERSION=$(ghr-latest ${GH_REPO})

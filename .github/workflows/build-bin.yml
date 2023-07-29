@@ -8,46 +8,48 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  build-x64:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        repo: [zstd, aria2, lshw, socat, sockperf, iperf]
+        bin:
+          - aria2
+          - bats-core
+          - cmake
+          - dnslookup
+          - fzf
+          - gh
+          - hadolint
+          - iperf
+          - jq
+          - lshw
+          - neofetch
+          - neovim
+          - ninja
+          - pandoc
+          - rclone
+          - ruff
+          - rust-default
+          - shellcheck
+          - shfmt
+          - socat
+          - zstd
+          - hexyl
+          - delta
+          - fd
+          - ripgrep
+          - tokei
 
     steps:
       - uses: actions/checkout@v3
-      - name: build.sh
-        run: ./build.sh ${{ matrix.repo }}
+      - name: dbuild.sh
+        run: ./dbuild.sh ${{ matrix.repo }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           BIN_BUILD: Y
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  pack-x64:
-    needs: build-x64
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: run.sh
-        run: ./run.sh
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  pack-aarch64:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: apt
-        run: |
-          sudo apt update -y
-          sudo apt install -y qemu-user-static
-      - name: run.sh
-        run: ./run.sh
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          ARCH: aarch64
   keepalive:
-    needs: [build-x64, pack-x64, pack-aarch64]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
