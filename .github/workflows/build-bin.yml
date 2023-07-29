@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: login
-        run: podman login --username pusnow --password ${CR_PW} ghcr.io
+        run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dbuild.sh
         run: ./dbuild.sh ${{ matrix.bin }}
         env:
