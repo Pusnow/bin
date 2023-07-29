@@ -99,7 +99,7 @@ esac
 if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd) BASE="cpp" ;;
-    dnslookup | fzf | gh | rclone) BASE="go" ;;
+    dnslookup | fzf | gh | rclone | shfmt) BASE="go" ;;
     ruff | hexyl | delta | fd | ripgrep | tokei) BASE="rust" ;;
     *) BASE="" ;;
     esac
