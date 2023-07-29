@@ -136,3 +136,12 @@ elif [ -n "${BASE}" ]; then
 fi
 
 podman build -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
+
+if [ -n "${DOCKER_PATH}" ]; then
+    podman push $IMAGE "docker://${DOCKER_PATH}:latest"
+
+    if [ -n "${VERSION}" ]; then
+        podman push $IMAGE "docker://${DOCKER_PATH}:${VERSION}"
+
+    fi
+fi
