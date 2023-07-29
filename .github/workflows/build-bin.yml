@@ -29,7 +29,6 @@ jobs:
           - pandoc
           - rclone
           - ruff
-          - rust-default
           - shellcheck
           - shfmt
           - socat
