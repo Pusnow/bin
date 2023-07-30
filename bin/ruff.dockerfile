@@ -1,4 +1,4 @@
-FROM rust AS BUILD
+FROM localhost/rust AS BUILD
 ARG VERSION
 ARG GH_REPO
 

@@ -1,4 +1,4 @@
-FROM go AS BUILD
+FROM localhost/go AS BUILD
 ARG VERSION
 ARG GH_REPO
 

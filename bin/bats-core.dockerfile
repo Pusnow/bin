@@ -1,4 +1,4 @@
-FROM base AS BUILD
+FROM localhost/base AS BUILD
 ARG VERSION
 ARG GH_REPO
 

@@ -1,4 +1,4 @@
-FROM cpp AS BUILD
+FROM localhost/cpp AS BUILD
 ARG VERSION
 ARG GH_REPO
 

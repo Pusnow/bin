@@ -1,4 +1,4 @@
-FROM cpp AS BUILD
+FROM localhost/cpp AS BUILD
 ARG VERSION
 RUN download-untar.sh lshw z "https://github.com/lyonel/lshw/archive/$VERSION.tar.gz"
 
