@@ -1,14 +1,25 @@
 #!/bin/bash
 set -e
 
+case $ARCH in
+x64)
+    IMAGE_ARCH="amd64"
+    ;;
+aarch64)
+    IMAGE_ARCH="arm64"
+    ;;
+*) IMAGE_ARCH="" ;;
+esac
+
 for IMG in $@; do
     podman image pull -q "ghcr.io/pusnow/bin:${IMG}-latest-${ARCH}" &
 done
 wait
 
+rm -rf build
 mkdir -p build
 
-podman images --format="{{.ID}}" --sort=id ghcr.io/pusnow/bin-* >build/ids
+podman images --format="{{.ID}}" --sort=id ghcr.io/pusnow/bin >build/ids
 
 wget -qO "ids-old.txt" "https://github.com/Pusnow/bin/releases/download/bin/ids-${ARCH}.txt" || true
 
@@ -29,7 +40,7 @@ done
 
 cd build
 
-podman build --tag pack .
+podman build --arch "${IMAGE_ARCH}" --tag pack .
 podman run -v $PWD:/build pack cp -r /opt/pusnow /build
 
 cp ids pusnow/
