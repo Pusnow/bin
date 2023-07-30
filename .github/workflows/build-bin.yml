@@ -38,6 +38,8 @@ jobs:
           - socat
           - tokei
           - zstd
+        arch:
+          - x64
 
     steps:
       - uses: actions/checkout@v3
@@ -48,10 +50,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
-          ARCH: x64
+          ARCH: ${{ matrix.arch }}
   pack:
     needs: [build]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
     steps:
       - uses: actions/checkout@v2
       - name: login
@@ -88,7 +94,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
-          ARCH: x64
+          ARCH: ${{ matrix.arch }}
 
   keepalive:
     needs: [pack]
