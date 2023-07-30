@@ -53,7 +53,7 @@ jobs:
         run: ./dbuild.sh ${{ matrix.bin }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
+          DOCKER_PATH: ghcr.io/pusnow/bin
           ARCH: ${{ matrix.arch }}
           GH_EVENT: ${{ github.event_name }}
   pack:
@@ -98,7 +98,7 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
+          DOCKER_PATH: ghcr.io/pusnow/bin
           ARCH: ${{ matrix.arch }}
           GH_EVENT: ${{ github.event_name }}
 

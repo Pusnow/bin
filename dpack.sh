@@ -2,7 +2,7 @@
 set -e
 
 for IMG in $@; do
-    podman image pull -q "ghcr.io/pusnow/bin-${IMG}:latest" &
+    podman image pull -q "ghcr.io/pusnow/bin:${IMG}-latest-${ARCH}" &
 done
 wait
 
@@ -20,7 +20,7 @@ if [ "${GH_EVENT}" != "workflow_dispatch" ]; then
 fi
 
 for IMG in $@; do
-    echo "FROM ghcr.io/pusnow/bin-${IMG}:latest AS ${IMG}" >>build/Dockerfile
+    echo "FROM ghcr.io/pusnow/bin:${IMG}-latest-${ARCH} AS ${IMG}" >>build/Dockerfile
 done
 echo "FROM alpine:latest" >>build/Dockerfile
 for IMG in $@; do

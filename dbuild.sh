@@ -54,11 +54,9 @@ arch() {
 case $ARCH in
 x64)
     IMAGE_ARCH="amd64"
-    TAG_POSTFIX=""
     ;;
 aarch64)
     IMAGE_ARCH="arm64"
-    TAG_POSTFIX="-aarch64"
     ;;
 *) IMAGE_ARCH="" ;;
 esac
@@ -112,7 +110,7 @@ fi
 
 if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ] && [ "${GH_EVENT}" != "workflow_dispatch" ]; then
 
-    if skopeo inspect "docker://${DOCKER_PATH}:${VERSION}${TAG_POSTFIX}" >/dev/null; then
+    if skopeo inspect "docker://${DOCKER_PATH}:${IMAGE}-${VERSION}-${ARCH}" >/dev/null; then
         echo "already exists"
         exit 0
     fi
@@ -159,10 +157,10 @@ fi
 buildah bud --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
 
 if [ -n "${DOCKER_PATH}" ]; then
-    podman push $IMAGE "docker://${DOCKER_PATH}:latest${TAG_POSTFIX}"
+    podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-latest-${ARCH}"
 
     if [ -n "${VERSION}" ]; then
-        podman push $IMAGE "docker://${DOCKER_PATH}:${VERSION}${TAG_POSTFIX}"
+        podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-${VERSION}-${ARCH}"
 
     fi
 fi
