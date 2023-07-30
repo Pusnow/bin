@@ -40,7 +40,6 @@ jobs:
           - zstd
         arch:
           - x64
-          - aarch64
 
     steps:
       - uses: actions/checkout@v3
