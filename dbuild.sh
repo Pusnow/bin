@@ -112,7 +112,7 @@ fi
 
 if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ] && [ "${GH_EVENT}" != "workflow_dispatch" ]; then
 
-    if skopeo inspect "docker://${DOCKER_PATH}:${VERSION}" >/dev/null; then
+    if skopeo inspect "docker://${DOCKER_PATH}:${VERSION}${TAG_POSTFIX}" >/dev/null; then
         echo "already exists"
         exit 0
     fi
