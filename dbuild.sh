@@ -39,11 +39,11 @@ if [ -z "$IMAGE" ]; then
 fi
 
 if [ -z "$ARCH" ]; then
-    ARCH=x86_64
+    ARCH=x64
 fi
 
 arch() {
-    if [[ "${ARCH}" == "x86_64" ]]; then
+    if [[ "${ARCH}" == "x64" ]]; then
         echo $1
     elif [[ "${ARCH}" == "aarch64" ]]; then
         echo $2
@@ -51,6 +51,12 @@ arch() {
         echo "Unknown"
     fi
 }
+
+case $ARCH in
+x64) IMAGE_ARCH="amd64" ;;
+aarch64) IMAGE_ARCH="aarch64" ;;
+*) IMAGE_ARCH="" ;;
+esac
 
 case $IMAGE in
 socat) VERSION=$(git-latest-tag "git://repo.or.cz/socat.git") ;;
@@ -107,7 +113,7 @@ if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ]; then
 
 fi
 
-podman build -f base.dockerfile -t base helper
+podman build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
@@ -119,7 +125,7 @@ if [ -z "$BASE" ]; then
 fi
 
 if [ -n "$BASE" ]; then
-    podman build -f $BASE.dockerfile -t $BASE helper
+    podman build --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
 fi
 
 VERSION_ARGS=""
@@ -144,7 +150,7 @@ elif [ -n "${BASE}" ]; then
     DOCKERFILE="bin/${BASE}-default.dockerfile"
 fi
 
-podman build -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
+podman build --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
 
 if [ -n "${DOCKER_PATH}" ]; then
     podman push $IMAGE "docker://${DOCKER_PATH}:latest"

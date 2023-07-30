@@ -47,6 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
+          ARCH: x64
   pack:
     needs: [build]
     runs-on: ubuntu-latest
