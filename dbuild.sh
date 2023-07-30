@@ -52,8 +52,6 @@ arch() {
     fi
 }
 
-podman build -f base.dockerfile -t base helper
-
 case $IMAGE in
 socat) VERSION=$(git-latest-tag "git://repo.or.cz/socat.git") ;;
 lshw) VERSION=$(git-latest-commit "https://github.com/lyonel/lshw.git") ;;
@@ -96,6 +94,21 @@ shellcheck)
 *) VERSION="" ;;
 esac
 
+if [ -z "${VERSION}" ] && [ -n "${GH_REPO}" ]; then
+    VERSION=$(ghr-latest ${GH_REPO})
+fi
+
+if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ]; then
+
+    if skopeo inspect "docker://${DOCKER_PATH}:${VERSION}" >/dev/null; then
+        echo "already exists"
+        exit 0
+    fi
+
+fi
+
+podman build -f base.dockerfile -t base helper
+
 if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd) BASE="cpp" ;;
@@ -107,10 +120,6 @@ fi
 
 if [ -n "$BASE" ]; then
     podman build -f $BASE.dockerfile -t $BASE helper
-fi
-
-if [ -z "${VERSION}" ] && [ -n "${GH_REPO}" ]; then
-    VERSION=$(ghr-latest ${GH_REPO})
 fi
 
 VERSION_ARGS=""
