@@ -52,8 +52,14 @@ arch() {
 }
 
 case $ARCH in
-x64) IMAGE_ARCH="amd64" ;;
-aarch64) IMAGE_ARCH="arm64" ;;
+x64)
+    IMAGE_ARCH="amd64"
+    TAG_POSTFIX=""
+    ;;
+aarch64)
+    IMAGE_ARCH="arm64"
+    TAG_POSTFIX="-aarch64"
+    ;;
 *) IMAGE_ARCH="" ;;
 esac
 
@@ -153,10 +159,10 @@ fi
 buildah bud --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
 
 if [ -n "${DOCKER_PATH}" ]; then
-    podman push $IMAGE "docker://${DOCKER_PATH}:latest"
+    podman push $IMAGE "docker://${DOCKER_PATH}:latest${TAG_POSTFIX}"
 
     if [ -n "${VERSION}" ]; then
-        podman push $IMAGE "docker://${DOCKER_PATH}:${VERSION}"
+        podman push $IMAGE "docker://${DOCKER_PATH}:${VERSION}${TAG_POSTFIX}"
 
     fi
 fi
