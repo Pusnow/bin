@@ -47,9 +47,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
+  pack:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: login
+        run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
+      - name: dpack.sh
+        run: ./dpack.sh bats-core cmake dnslookup fzf gh hadolint iperf jq lshw neofetch neovim ninja pandoc rclone ruff shellcheck shfmt socat zstd hexyl delta fd ripgrep tokei
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DOCKER_PATH: ghcr.io/pusnow/bin-${{ matrix.bin }}
+          ARCH: x86_64
 
   keepalive:
-    needs: [build]
+    needs: [pack]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
