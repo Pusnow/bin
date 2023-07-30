@@ -1,6 +1,7 @@
 FROM localhost/rust AS BUILD
 ARG VERSION
 ARG GH_REPO
+ARG EXTRA_RUN
 
 RUN download-ghr.sh ${GH_REPO} ${VERSION}
 
