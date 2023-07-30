@@ -31,7 +31,6 @@ git-latest-commit() {
 set -ex
 
 IMAGE=$1
-ARCH=$2
 
 if [ -z "$IMAGE" ]; then
     echo "No image"
@@ -54,7 +53,7 @@ arch() {
 
 case $ARCH in
 x64) IMAGE_ARCH="amd64" ;;
-aarch64) IMAGE_ARCH="aarch64" ;;
+aarch64) IMAGE_ARCH="arm64" ;;
 *) IMAGE_ARCH="" ;;
 esac
 
@@ -105,7 +104,7 @@ if [ -z "${VERSION}" ] && [ -n "${GH_REPO}" ]; then
     VERSION=$(ghr-latest ${GH_REPO})
 fi
 
-if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ]; then
+if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ] && [ "${GH_EVENT}" != "workflow_dispatch" ]; then
 
     if skopeo inspect "docker://${DOCKER_PATH}:${VERSION}" >/dev/null; then
         echo "already exists"
@@ -114,7 +113,7 @@ if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ]; then
 
 fi
 
-podman build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
+buildah bud --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
@@ -126,7 +125,7 @@ if [ -z "$BASE" ]; then
 fi
 
 if [ -n "$BASE" ]; then
-    podman build --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
+    buildah bud --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
 fi
 
 VERSION_ARGS=""
@@ -151,7 +150,7 @@ elif [ -n "${BASE}" ]; then
     DOCKERFILE="bin/${BASE}-default.dockerfile"
 fi
 
-podman build --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
+buildah bud --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
 
 if [ -n "${DOCKER_PATH}" ]; then
     podman push $IMAGE "docker://${DOCKER_PATH}:latest"
