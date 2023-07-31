@@ -12,29 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        bin:
-          - bats-core
-          - cmake
+        bin: # only utils, no build tools, linters, formatter
           - delta
           - dnslookup
           - dust
           - fd
           - fzf
           - gh
-          - hadolint
           - hexyl
           - iperf
           - jq
           - lshw
           - neofetch
           - neovim
-          - ninja
           - pandoc
           - rclone
           - ripgrep
-          - ruff
-          - shellcheck
-          - shfmt
           - socat
           - tokei
           - zstd
@@ -69,28 +62,21 @@ jobs:
       - name: dpack.sh
         run: |
           ./dpack.sh \
-            bats-core \
-            cmake \
             delta \
             dnslookup \
             dust \
             fd \
             fzf \
             gh \
-            hadolint \
             hexyl \
             iperf \
             jq \
             lshw \
             neofetch \
             neovim \
-            ninja \
             pandoc \
             rclone \
             ripgrep \
-            ruff \
-            shellcheck \
-            shfmt \
             socat \
             tokei \
             zstd
