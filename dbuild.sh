@@ -101,6 +101,7 @@ shellcheck)
     GH_REPO="koalaman/shellcheck"
     VERSION_ARCH=$(arch x86_64 aarch64)
     ;;
+distrobox) GH_REPO="89luca89/distrobox" ;;
 *) VERSION="" ;;
 esac
 

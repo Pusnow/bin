@@ -14,6 +14,7 @@ jobs:
       matrix:
         bin: # only utils, no build tools, linters, formatter
           - delta
+          - distrobox
           - dnslookup
           - dust
           - fd
@@ -63,6 +64,7 @@ jobs:
         run: |
           ./dpack.sh \
             delta \
+            distrobox \
             dnslookup \
             dust \
             fd \
