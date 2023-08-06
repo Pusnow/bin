@@ -118,9 +118,9 @@ if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ] && [ "${GH_EVENT}" != "workflo
 
 fi
 
-sudo podman info
+podman info
 
-sudo podman build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
+podman build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
@@ -132,7 +132,7 @@ if [ -z "$BASE" ]; then
 fi
 
 if [ -n "$BASE" ]; then
-   sudo podman build --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
+   podman build --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
 fi
 
 VERSION_ARGS=""
@@ -157,13 +157,13 @@ elif [ -n "${BASE}" ]; then
     DOCKERFILE="bin/${BASE}-default.dockerfile"
 fi
 
-sudo podman build --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
+podman build --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
 
 if [ -n "${DOCKER_PATH}" ]; then
-    sudo podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-latest-${ARCH}"
+    podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-latest-${ARCH}"
 
     if [ -n "${VERSION}" ]; then
-        sudo podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-${VERSION}-${ARCH}"
+        podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-${VERSION}-${ARCH}"
 
     fi
 fi

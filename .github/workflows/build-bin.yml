@@ -42,9 +42,9 @@ jobs:
         run: sudo apt install -y qemu-user-static
         if: matrix.arch != 'x64'
       - name: login
-        run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
+        run: sudo podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dbuild.sh
-        run: ./dbuild.sh ${{ matrix.bin }}
+        run: sudo ./dbuild.sh ${{ matrix.bin }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin
