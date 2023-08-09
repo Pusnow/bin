@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PODMAN="sudo podman"
+
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
 }
@@ -75,6 +77,8 @@ ripgrep) GH_REPO="BurntSushi/ripgrep" ;;
 dust) GH_REPO="bootandy/dust" ;;
 tokei) GH_REPO="XAMPPRocky/tokei" ;;
 ruff) GH_REPO="astral-sh/ruff" ;;
+bat) GH_REPO="sharkdp/bat" ;;
+bottom) GH_REPO="ClementTsang/bottom" ;;
 fzf) GH_REPO="junegunn/fzf" ;;
 gh) GH_REPO="cli/cli" ;;
 dnslookup) GH_REPO="ameshkov/dnslookup" ;;
@@ -118,21 +122,21 @@ if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ] && [ "${GH_EVENT}" != "workflo
 
 fi
 
-podman info
+$PODMAN info
 
-podman build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
+$PODMAN build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd) BASE="cpp" ;;
     dnslookup | fzf | gh | rclone | shfmt) BASE="go" ;;
-    ruff | hexyl | delta | fd | ripgrep | tokei | dust) BASE="rust" ;;
+    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom) BASE="rust" ;;
     *) BASE="" ;;
     esac
 fi
 
 if [ -n "$BASE" ]; then
-   podman build --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
+   $PODMAN build --arch "${IMAGE_ARCH}" -f $BASE.dockerfile -t $BASE helper
 fi
 
 VERSION_ARGS=""
@@ -157,13 +161,13 @@ elif [ -n "${BASE}" ]; then
     DOCKERFILE="bin/${BASE}-default.dockerfile"
 fi
 
-podman build --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
+$PODMAN build --arch "${IMAGE_ARCH}" -t $IMAGE ${VERSION_ARGS} ${GH_REPO_ARGS} ${VERSION_ARCH_ARGS} - <"${DOCKERFILE}"
 
 if [ -n "${DOCKER_PATH}" ]; then
-    podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-latest-${ARCH}"
+    $PODMAN push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-latest-${ARCH}"
 
     if [ -n "${VERSION}" ]; then
-        podman push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-${VERSION}-${ARCH}"
+        $PODMAN push $IMAGE "docker://${DOCKER_PATH}:${IMAGE}-${VERSION}-${ARCH}"
 
     fi
 fi

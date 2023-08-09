@@ -13,6 +13,8 @@ jobs:
     strategy:
       matrix:
         bin: # only utils, no build tools, linters, formatter
+          - bat
+          - bottom
           - delta
           - distrobox
           - dnslookup
@@ -63,6 +65,8 @@ jobs:
       - name: dpack.sh
         run: |
           ./dpack.sh \
+            bat \
+            bottom \
             delta \
             distrobox \
             dnslookup \
