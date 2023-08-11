@@ -79,6 +79,7 @@ tokei) GH_REPO="XAMPPRocky/tokei" ;;
 ruff) GH_REPO="astral-sh/ruff" ;;
 bat) GH_REPO="sharkdp/bat" ;;
 bottom) GH_REPO="ClementTsang/bottom" ;;
+lsd) GH_REPO="lsd-rs/lsd" ;;
 fzf) GH_REPO="junegunn/fzf" ;;
 gh) GH_REPO="cli/cli" ;;
 dnslookup) GH_REPO="ameshkov/dnslookup" ;;
@@ -130,7 +131,7 @@ if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd) BASE="cpp" ;;
     dnslookup | fzf | gh | rclone | shfmt) BASE="go" ;;
-    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom) BASE="rust" ;;
+    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd) BASE="rust" ;;
     *) BASE="" ;;
     esac
 fi
