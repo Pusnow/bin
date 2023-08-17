@@ -73,6 +73,7 @@ zstd) GH_REPO="facebook/zstd" ;;
 hexyl) GH_REPO="sharkdp/hexyl" ;;
 delta) GH_REPO="dandavison/delta" ;;
 fd) GH_REPO="sharkdp/fd" ;;
+hyperfine) GH_REPO="sharkdp/hyperfine" ;;
 ripgrep) GH_REPO="BurntSushi/ripgrep" ;;
 dust) GH_REPO="bootandy/dust" ;;
 tokei) GH_REPO="XAMPPRocky/tokei" ;;
@@ -131,7 +132,7 @@ if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd) BASE="cpp" ;;
     dnslookup | fzf | gh | rclone | shfmt) BASE="go" ;;
-    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd) BASE="rust" ;;
+    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine) BASE="rust" ;;
     *) BASE="" ;;
     esac
 fi
