@@ -31,6 +31,7 @@ jobs:
           - neofetch
           - neovim
           - pandoc
+          - pigz
           - rclone
           - ripgrep
           - socat
@@ -85,6 +86,7 @@ jobs:
             neofetch \
             neovim \
             pandoc \
+            pigz \
             rclone \
             ripgrep \
             socat \
