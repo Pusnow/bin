@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PODMAN="sudo podman"
+PODMAN="podman"
 
 gh-latest() {
     gh api "repos/$1/$2/releases/latest" -q .tag_name
