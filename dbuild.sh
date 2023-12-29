@@ -109,6 +109,7 @@ shellcheck)
     ;;
 distrobox) GH_REPO="89luca89/distrobox" ;;
 pigz) VERSION=$(gh-latest-tag madler pigz) ;;
+pixz) GH_REPO="vasi/pixz" ;;
 *) VERSION="" ;;
 esac
 
@@ -131,7 +132,7 @@ $PODMAN build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
-    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz) BASE="cpp" ;;
+    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz) BASE="cpp" ;;
     dnslookup | fzf | gh | rclone | shfmt) BASE="go" ;;
     ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine) BASE="rust" ;;
     *) BASE="" ;;
