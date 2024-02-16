@@ -67,7 +67,12 @@ jobs:
           - x64
           - aarch64
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: qemu-user-static
+        run: |
+          sudo apt update
+          sudo apt install -y qemu-user-static
+        if: matrix.arch != 'x64'
       - name: login
         run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dpack.sh
