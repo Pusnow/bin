@@ -16,8 +16,6 @@ jobs:
           - bat
           - bottom
           - delta
-          - distrobox
-          - dnslookup
           - dust
           - fd
           - fzf
@@ -72,8 +70,6 @@ jobs:
             bat \
             bottom \
             delta \
-            distrobox \
-            dnslookup \
             dust \
             fd \
             fzf \
