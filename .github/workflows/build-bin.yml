@@ -27,7 +27,6 @@ jobs:
           - lsd
           - lshw
           - neofetch
-          - neovim
           - pandoc
           - pigz
           - pixz
@@ -90,7 +89,6 @@ jobs:
             lsd \
             lshw \
             neofetch \
-            neovim \
             pandoc \
             pigz \
             pixz \
