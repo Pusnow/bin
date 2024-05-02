@@ -108,6 +108,7 @@ shellcheck)
     ;;
 pigz) VERSION=$(gh-latest-tag madler pigz) ;;
 pixz) GH_REPO="vasi/pixz" ;;
+fastfetch) GH_REPO="fastfetch-cli/fastfetch" ;;
 *) VERSION="" ;;
 esac
 

@@ -17,6 +17,7 @@ jobs:
           - bottom
           - delta
           - dust
+          - fastfetch
           - fd
           - fzf
           - gh
@@ -26,7 +27,6 @@ jobs:
           - jq
           - lsd
           - lshw
-          - neofetch
           - neovim
           - pandoc
           - pigz
@@ -80,6 +80,7 @@ jobs:
             bottom \
             delta \
             dust \
+            fastfetch \
             fd \
             fzf \
             gh \
@@ -89,7 +90,6 @@ jobs:
             jq \
             lsd \
             lshw \
-            neofetch \
             neovim \
             pandoc \
             pigz \
