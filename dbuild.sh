@@ -83,7 +83,6 @@ bottom) GH_REPO="ClementTsang/bottom" ;;
 lsd) GH_REPO="lsd-rs/lsd" ;;
 fzf) GH_REPO="junegunn/fzf" ;;
 gh) GH_REPO="cli/cli" ;;
-dnslookup) GH_REPO="ameshkov/dnslookup" ;;
 shfmt) GH_REPO="mvdan/sh" ;;
 neovim) GH_REPO="neovim/neovim" ;;
 jq) GH_REPO="jqlang/jq" ;;
@@ -107,9 +106,9 @@ shellcheck)
     GH_REPO="koalaman/shellcheck"
     VERSION_ARCH=$(arch x86_64 aarch64)
     ;;
-distrobox) GH_REPO="89luca89/distrobox" ;;
 pigz) VERSION=$(gh-latest-tag madler pigz) ;;
 pixz) GH_REPO="vasi/pixz" ;;
+fastfetch) GH_REPO="fastfetch-cli/fastfetch" ;;
 *) VERSION="" ;;
 esac
 
@@ -132,8 +131,8 @@ $PODMAN build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
-    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz) BASE="cpp" ;;
-    dnslookup | fzf | gh | rclone | shfmt) BASE="go" ;;
+    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch) BASE="cpp" ;;
+    fzf | gh | rclone | shfmt) BASE="go" ;;
     ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine) BASE="rust" ;;
     *) BASE="" ;;
     esac
