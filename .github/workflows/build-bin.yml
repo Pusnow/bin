@@ -39,6 +39,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: install deps
+        run: |
+          sudo apt update
+          sudo apt install -y podman skopeo
       - name: login
         run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dbuild.sh
@@ -59,6 +63,10 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm]
     steps:
       - uses: actions/checkout@v3
+      - name: install deps
+        run: |
+          sudo apt update
+          sudo apt install -y podman skopeo
       - name: login
         run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dpack.sh
