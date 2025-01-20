@@ -27,6 +27,7 @@ jobs:
           - jq
           - lsd
           - lshw
+          - neovim
           - pigz
           - pixz
           - rclone
@@ -88,6 +89,7 @@ jobs:
             jq \
             lsd \
             lshw \
+            neovim \
             pigz \
             pixz \
             rclone \
