@@ -39,6 +39,11 @@ if [ -z "$IMAGE" ]; then
     exit 1
 fi
 
+case $OS in
+ubuntu-latest) ARCH=x64 ;;
+ubuntu-*-arm) ARCH=aarch64 ;;
+esac
+
 if [ -z "$ARCH" ]; then
     ARCH=x64
 fi

@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         bin: # only utils, no build tools, linters, formatter
@@ -35,17 +35,10 @@ jobs:
           - socat
           - tokei
           - zstd
-        arch:
-          - x64
-          - aarch64
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v3
-      - name: qemu-user-static
-        run: |
-          sudo apt update
-          sudo apt install -y qemu-user-static
-        if: matrix.arch != 'x64'
       - name: login
         run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dbuild.sh
@@ -53,23 +46,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin
-          ARCH: ${{ matrix.arch }}
+          OS: ${{ matrix.os }}
           GH_EVENT: ${{ github.event_name }}
   pack:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         arch:
           - x64
           - aarch64
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
-      - name: qemu-user-static
-        run: |
-          sudo apt update
-          sudo apt install -y qemu-user-static
-        if: matrix.arch != 'x64'
       - name: login
         run: podman login --username pusnow --password "${{ secrets.CR_PW }}" ghcr.io
       - name: dpack.sh
@@ -101,7 +90,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DOCKER_PATH: ghcr.io/pusnow/bin
-          ARCH: ${{ matrix.arch }}
+          OS: ${{ matrix.os }}
           GH_EVENT: ${{ github.event_name }}
 
   keepalive:

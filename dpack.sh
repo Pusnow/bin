@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+case $OS in
+ubuntu-latest) ARCH=x64 ;;
+ubuntu-*-arm) ARCH=aarch64 ;;
+esac
+
+if [ -z "$ARCH" ]; then
+    ARCH=x64
+fi
+
 case $ARCH in
 x64)
     IMAGE_ARCH="amd64"
@@ -10,7 +19,6 @@ aarch64)
     ;;
 *) IMAGE_ARCH="" ;;
 esac
-
 
 for IMG in $@; do
     podman image pull -q "ghcr.io/pusnow/bin:${IMG}-latest-${ARCH}" &
