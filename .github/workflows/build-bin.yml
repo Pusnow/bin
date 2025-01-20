@@ -57,9 +57,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        arch:
-          - x64
-          - aarch64
         os: [ubuntu-latest, ubuntu-24.04-arm]
     steps:
       - uses: actions/checkout@v3
