@@ -38,7 +38,7 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: install deps
         run: |
           sudo apt update
@@ -59,7 +59,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: install deps
         run: |
           sudo apt update
@@ -102,5 +102,5 @@ jobs:
     needs: [pack]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: gautamkrishnar/keepalive-workflow@v1
