@@ -96,9 +96,3 @@ jobs:
           OS: ${{ matrix.os }}
           GH_EVENT: ${{ github.event_name }}
 
-  keepalive:
-    needs: [pack]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v1
