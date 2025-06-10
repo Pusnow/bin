@@ -24,7 +24,6 @@ jobs:
           - hexyl
           - hyperfine
           - iperf
-          - jq
           - lsd
           - lshw
           - neovim
@@ -80,7 +79,6 @@ jobs:
             hexyl \
             hyperfine \
             iperf \
-            jq \
             lsd \
             lshw \
             neovim \
