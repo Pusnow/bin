@@ -114,6 +114,7 @@ shellcheck)
 pigz) VERSION=$(gh-latest-tag madler pigz) ;;
 pixz) GH_REPO="vasi/pixz" ;;
 fastfetch) GH_REPO="fastfetch-cli/fastfetch" ;;
+tabiew) GH_REPO="shshemi/tabiew" ;;
 *) VERSION="" ;;
 esac
 
@@ -138,7 +139,7 @@ if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch) BASE="cpp" ;;
     fzf | gh | rclone | shfmt) BASE="go" ;;
-    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine) BASE="rust" ;;
+    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine | tabiew) BASE="rust" ;;
     *) BASE="" ;;
     esac
 fi
