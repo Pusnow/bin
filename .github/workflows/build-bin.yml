@@ -22,6 +22,7 @@ jobs:
           - fzf
           - gh
           - hexyl
+          - htop
           - hyperfine
           - iperf
           - lsd
@@ -78,6 +79,7 @@ jobs:
             fzf \
             gh \
             hexyl \
+            htop \
             hyperfine \
             iperf \
             lsd \
