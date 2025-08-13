@@ -115,6 +115,7 @@ pigz) VERSION=$(gh-latest-tag madler pigz) ;;
 pixz) GH_REPO="vasi/pixz" ;;
 fastfetch) GH_REPO="fastfetch-cli/fastfetch" ;;
 tabiew) GH_REPO="shshemi/tabiew" ;;
+htop) GH_REPO="htop-dev/htop" ;;
 *) VERSION="" ;;
 esac
 
