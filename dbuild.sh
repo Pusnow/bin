@@ -138,7 +138,7 @@ $PODMAN build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
-    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch) BASE="cpp" ;;
+    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch | htop) BASE="cpp" ;;
     fzf | gh | rclone | shfmt) BASE="go" ;;
     ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine | tabiew) BASE="rust" ;;
     *) BASE="" ;;
