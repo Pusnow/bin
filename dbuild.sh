@@ -72,7 +72,7 @@ case $IMAGE in
 socat) VERSION=$(git-latest-tag "git://repo.or.cz/socat.git") ;;
 lshw) VERSION=$(git-latest-commit "https://github.com/lyonel/lshw.git") ;;
 aria2) GH_REPO="aria2/aria2" ;;
-iperf) VERSION=$(gh-latest-tag esnet iperf) ;;
+iperf) GH_REPO="esnet/iperf" ;;
 sockperf) GH_REPO="Mellanox/sockperf" ;;
 zstd) GH_REPO="facebook/zstd" ;;
 hexyl) GH_REPO="sharkdp/hexyl" ;;
