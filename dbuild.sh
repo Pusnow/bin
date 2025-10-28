@@ -117,6 +117,7 @@ fastfetch) GH_REPO="fastfetch-cli/fastfetch" ;;
 tabiew) GH_REPO="shshemi/tabiew" ;;
 htop) GH_REPO="htop-dev/htop" ;;
 nethogs) GH_REPO="raboof/nethogs" ;;
+ptags) GH_REPO="dalance/ptags" ;;
 *) VERSION="" ;;
 esac
 
@@ -141,7 +142,7 @@ if [ -z "$BASE" ]; then
     case $IMAGE in
     aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch | htop | nethogs) BASE="cpp" ;;
     fzf | gh | rclone | shfmt) BASE="go" ;;
-    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine | tabiew) BASE="rust" ;;
+    ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine | tabiew | ptags) BASE="rust" ;;
     *) BASE="" ;;
     esac
 fi
