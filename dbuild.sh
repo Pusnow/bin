@@ -115,6 +115,7 @@ tabiew) GH_REPO="shshemi/tabiew" ;;
 htop) GH_REPO="htop-dev/htop" ;;
 nethogs) GH_REPO="raboof/nethogs" ;;
 ptags) GH_REPO="dalance/ptags" ;;
+ctags) GH_REPO="universal-ctags/ctags" ;;
 *) VERSION="" ;;
 esac
 
@@ -137,7 +138,7 @@ $PODMAN build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
-    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch | htop | nethogs) BASE="cpp" ;;
+    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch | htop | nethogs | ctags) BASE="cpp" ;;
     fzf | gh | rclone | shfmt) BASE="go" ;;
     ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine | tabiew | ptags) BASE="rust" ;;
     *) BASE="" ;;

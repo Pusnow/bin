@@ -15,6 +15,7 @@ jobs:
         bin: # only utils, no build tools, linters, formatter
           - bat
           - bottom
+          - ctags
           - delta
           - dust
           - fastfetch
@@ -74,6 +75,7 @@ jobs:
           ./dpack.sh \
             bat \
             bottom \
+            ctags \
             delta \
             dust \
             fastfetch \
