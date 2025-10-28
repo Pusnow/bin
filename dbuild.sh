@@ -2,17 +2,14 @@
 
 PODMAN="podman"
 
-gh-latest() {
-    gh api "repos/$1/$2/releases/latest" -q .tag_name
-}
 ghr-latest() {
-    gh api "repos/$1/releases/latest" -q .tag_name
+    curl https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
 }
 gh-master() {
-    gh api "repos/$1/$2/commits" -q ".[0].sha"
+    curl https://api.github.com/repos/$1/commits  | jq -r .[0].sha
 }
 gh-latest-tag() {
-    gh api "repos/$1/$2/git/refs/tags" -q .[-1].ref.[10:]
+    curl https://api.github.com/repos/$1/git/refs/tags  | jq -r .[-1].ref[10:]
 }
 
 git-latest-tag() {
@@ -111,7 +108,7 @@ shellcheck)
     GH_REPO="koalaman/shellcheck"
     VERSION_ARCH=$(arch x86_64 aarch64)
     ;;
-pigz) VERSION=$(gh-latest-tag madler pigz) ;;
+pigz) VERSION=$(gh-latest-tag madler/pigz) ;;
 pixz) GH_REPO="vasi/pixz" ;;
 fastfetch) GH_REPO="fastfetch-cli/fastfetch" ;;
 tabiew) GH_REPO="shshemi/tabiew" ;;
