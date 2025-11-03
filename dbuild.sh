@@ -3,13 +3,13 @@
 PODMAN="podman"
 
 ghr-latest() {
-    curl https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
+    curl --retry 5 https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
 }
 gh-master() {
-    curl https://api.github.com/repos/$1/commits  | jq -r .[0].sha
+    curl --retry 5 https://api.github.com/repos/$1/commits  | jq -r .[0].sha
 }
 gh-latest-tag() {
-    curl https://api.github.com/repos/$1/git/refs/tags  | jq -r .[-1].ref[10:]
+    curl --retry 5 https://api.github.com/repos/$1/git/refs/tags  | jq -r .[-1].ref[10:]
 }
 
 git-latest-tag() {
