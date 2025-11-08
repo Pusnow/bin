@@ -2,14 +2,24 @@
 
 PODMAN="podman"
 
-ghr-latest() {
-    curl --retry 5 https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
+# gh-latest() {
+#     curl --retry 5 https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
+# }
+# gh-master() {
+#     curl --retry 5 https://api.github.com/repos/$1/commits | jq -r .[0].sha
+# }
+# gh-latest-tag() {
+#     curl --retry 5 https://api.github.com/repos/$1/git/refs/tags | jq -r .[-1].ref[10:]
+# }
+
+gh-latest() {
+    gh api "repos/$1/releases/latest" -q .tag_name
 }
 gh-master() {
-    curl --retry 5 https://api.github.com/repos/$1/commits  | jq -r .[0].sha
+    gh api "repos/$1/commits" -q ".[0].sha"
 }
 gh-latest-tag() {
-    curl --retry 5 https://api.github.com/repos/$1/git/refs/tags  | jq -r .[-1].ref[10:]
+    gh api "repos/$1/git/refs/tags" -q .[-1].ref.[10:]
 }
 
 git-latest-tag() {
@@ -120,7 +130,7 @@ ctags) GH_REPO="universal-ctags/ctags" ;;
 esac
 
 if [ -z "${VERSION}" ] && [ -n "${GH_REPO}" ]; then
-    VERSION=$(ghr-latest ${GH_REPO})
+    VERSION=$(gh-latest ${GH_REPO})
 fi
 
 if [ -n "${DOCKER_PATH}" ] && [ -n "${VERSION}" ] && [ "${GH_EVENT}" != "workflow_dispatch" ]; then
