@@ -2,16 +2,6 @@
 
 PODMAN="podman"
 
-# gh-latest() {
-#     curl --retry 5 https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
-# }
-# gh-master() {
-#     curl --retry 5 https://api.github.com/repos/$1/commits | jq -r .[0].sha
-# }
-# gh-latest-tag() {
-#     curl --retry 5 https://api.github.com/repos/$1/git/refs/tags | jq -r .[-1].ref[10:]
-# }
-
 gh-latest() {
     gh api "repos/$1/releases/latest" -q .tag_name
 }
@@ -21,6 +11,16 @@ gh-master() {
 gh-latest-tag() {
     gh api "repos/$1/git/refs/tags" -q .[-1].ref.[10:]
 }
+
+# gh-latest() {
+#     curl --retry 5 https://api.github.com/repos/$1/releases/latest | jq -r .tag_name
+# }
+# gh-master() {
+#     curl --retry 5 https://api.github.com/repos/$1/commits | jq -r .[0].sha
+# }
+# gh-latest-tag() {
+#     curl --retry 5 https://api.github.com/repos/$1/git/refs/tags | jq -r .[-1].ref[10:]
+# }
 
 git-latest-tag() {
     TMPDIR=$(mktemp -d)
@@ -126,6 +126,7 @@ htop) GH_REPO="htop-dev/htop" ;;
 nethogs) GH_REPO="raboof/nethogs" ;;
 ptags) GH_REPO="dalance/ptags" ;;
 ctags) GH_REPO="universal-ctags/ctags" ;;
+rizin) GH_REPO="rizinorg/rizin" ;;
 *) VERSION="" ;;
 esac
 
@@ -148,7 +149,7 @@ $PODMAN build --arch "${IMAGE_ARCH}" -f base.dockerfile -t base helper
 
 if [ -z "$BASE" ]; then
     case $IMAGE in
-    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch | htop | nethogs | ctags) BASE="cpp" ;;
+    aria2 | iperf | jq | lshw | neovim | ninja | socat | zstd | pigz | pixz | fastfetch | htop | nethogs | ctags | rizin) BASE="cpp" ;;
     fzf | gh | rclone | shfmt) BASE="go" ;;
     ruff | hexyl | delta | fd | ripgrep | tokei | dust | bat | bottom | lsd | hyperfine | tabiew | ptags) BASE="rust" ;;
     *) BASE="" ;;
